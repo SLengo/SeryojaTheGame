@@ -81,6 +81,19 @@ namespace Race
             KeyTrackTimer.Start();
             CollisionTimer.Start();
         }
+        private void GameOver()
+        {
+            BonusGeneratorTimer.Stop();
+            ObstsGeneratorTimer.Stop();
+            KeyTrackTimer.Stop();
+            CollisionTimer.Stop();
+            foreach (Obstacle item in CurrentObsts)
+            {
+                item.ObstacleFiredAnimation();
+                RemoveElementAfterAnimation(item.ObstToCanvas);
+            }
+            CurrentObsts.Clear();
+        }
 
         private void ObstsGeneratorTimerTick(object sender, EventArgs e)
         {
@@ -119,7 +132,12 @@ namespace Race
                 if (ship.ShipHitBox.IntersectsWith(CurrentObsts[i].GetHitBoxObst()))
                 {
                     ConsoleMethod.WriteToConsole("Obst number " + i + " hitted!", Brushes.White);
-                    ship.ShipHp -= CurrentObsts[i].ObstDamage;
+                    ship.ShipHp = ship.ShipHp - CurrentObsts[i].ObstDamage <= 0 ?
+                        0 : ship.ShipHp - CurrentObsts[i].ObstDamage;
+                    if(ship.ShipHp == 0)
+                    {
+                        GameOver();
+                    }
                 }
             }
 
