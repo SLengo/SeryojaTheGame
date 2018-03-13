@@ -1,0 +1,15 @@
+﻿<Application x:Class="Race.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="clr-namespace:Race"
+             StartupUri="MainWindow.xaml">
+    <Application.Resources>
+        <Image x:Key="obstmask1" Source="images/obst1.png" />
+        <Image x:Key="obstmask2" Source="images/obst2.png" />
+        <Image x:Key="obstmask3" Source="images/obst3.png" />
+        <Image x:Key="meteor" Source="images/meteor_t.jpg" />
+        <Image x:Key="HpBonus" Source="images/health_bonus.png" />
+        <Image x:Key="AmmoBonus" Source="images/laser_bonus.png" />
+        <Image x:Key="falcone" Source="images/UpperHull.png" />
+    </Application.Resources>
+</Application>

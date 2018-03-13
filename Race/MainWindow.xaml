@@ -1,0 +1,44 @@
+﻿<Window x:Class="Race.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Race"
+        xmlns:gif="http://wpfanimatedgif.codeplex.com"
+        mc:Ignorable="d"
+        Title="StarRace" Height="700" Width="600" Loaded="Window_Loaded"
+        WindowStartupLocation="CenterScreen" Name="StarRaceWindow"
+        WindowStyle="ToolWindow" KeyDown="Window_KeyDown" KeyUp="Window_KeyUp">
+    <Window.Resources>
+        <local:DataConvertors x:Key="myDateConverter" />
+    </Window.Resources>
+    <Grid Background="Black">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="50" />
+            <RowDefinition  />
+        </Grid.RowDefinitions>
+        <Border BorderThickness="2" Panel.ZIndex="2" Name="StatusBar" Visibility="Hidden" BorderBrush="#cccdce">
+            <StackPanel Background="Black" Orientation="Horizontal"
+                        Panel.ZIndex="2">
+                <StackPanel Orientation="Horizontal">
+                    <Image Height="50" gif:ImageBehavior.AnimatedSource="images/hp_heart.gif" />
+                    <TextBlock Name="HpValue" Foreground="White" Width="70"
+                               Text="{Binding Path=ShipHp, UpdateSourceTrigger=PropertyChanged}" FontSize="35" />
+                </StackPanel>
+                <StackPanel Margin="25,0,0,0" Orientation="Horizontal">
+                    <Image Height="50" gif:ImageBehavior.AnimatedSource="images/redsparkle.gif" />
+                    <TextBlock Name="AmmoValue" Foreground="White"
+                               Text="{Binding Path=ShipAmmo, UpdateSourceTrigger=PropertyChanged}" FontSize="35" />
+                </StackPanel>
+            </StackPanel>
+        </Border>
+
+        <Canvas Grid.Row="1" Name="MainCanvas" Background="Black" x:FieldModifier="public">
+        </Canvas>
+        
+        <StackPanel Grid.Row="1" Name="Menu" HorizontalAlignment="Center" VerticalAlignment="Center" Orientation="Vertical">
+            <Button Name="Start" Click="Start_Click" Content="Start" Width="300" Margin="5"/>
+            <Button Name="Quit" Click="Quit_Click" Content="Quit" Width="300" Margin="5"/>
+        </StackPanel>
+    </Grid>
+</Window>
