@@ -81,6 +81,9 @@ namespace Race
             KeyTrackTimer.Start();
             CollisionTimer.Start();
         }
+
+
+
         private void GameOver()
         {
             BonusGeneratorTimer.Stop();
