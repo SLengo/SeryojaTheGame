@@ -15,7 +15,7 @@
             <TextBlock Name="MainOutput" Background="Black" Foreground="White"/>
         </ScrollViewer>
         <Border Grid.Row="1" BorderThickness="2" BorderBrush="#cccdce">
-        <TextBox Name="MainInput" Background="Black" Foreground="White" KeyDown="MainInput_KeyDown" />
+        <TextBox TabIndex="1" Name="MainInput" Background="Black" Foreground="White" KeyDown="MainInput_KeyDown" />
         </Border>
     </Grid>
 </Window>

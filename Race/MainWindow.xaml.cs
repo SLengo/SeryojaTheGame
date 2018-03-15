@@ -74,6 +74,16 @@ namespace Race
 
         private void InitGame()
         {
+            foreach (UIElement item in MainCanvas.Children)
+            {
+                if(item is StackPanel)
+                {
+                    MainCanvas.Children.Remove(item);
+                    break;
+                }
+            }
+            this.DataContext = null;
+            ship = null;
             ship = new StarShip(this);
             this.DataContext = ship;
             BonusGeneratorTimer.Start();
@@ -86,6 +96,8 @@ namespace Race
 
         private void GameOver()
         {
+            AnimationsRace.AnimationShipGameOver(ship);
+            RemoveElementAfterAnimation(ship.shipRectangle);
             BonusGeneratorTimer.Stop();
             ObstsGeneratorTimer.Stop();
             KeyTrackTimer.Stop();
@@ -96,6 +108,7 @@ namespace Race
                 RemoveElementAfterAnimation(item.ObstToCanvas);
             }
             CurrentObsts.Clear();
+            AnimationsRace.AnimationGameOver();
         }
 
         private void ObstsGeneratorTimerTick(object sender, EventArgs e)
@@ -137,6 +150,7 @@ namespace Race
                     ConsoleMethod.WriteToConsole("Obst number " + i + " hitted!", Brushes.White);
                     ship.ShipHp = ship.ShipHp - CurrentObsts[i].ObstDamage <= 0 ?
                         0 : ship.ShipHp - CurrentObsts[i].ObstDamage;
+                    AnimationsRace.AnimationShipDamage(ship);
                     if(ship.ShipHp == 0)
                     {
                         GameOver();
@@ -380,5 +394,6 @@ namespace Race
         {
             App.Current.Shutdown();
         }
+
     }
 }

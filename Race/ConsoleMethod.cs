@@ -38,6 +38,21 @@ namespace Race
         {
             switch (command)
             {
+                case "sethp":
+                    {
+                        if ((Application.Current.MainWindow as MainWindow).ship != null)
+                        {
+                            double hp_count = 0;
+                            Double.TryParse(param, out hp_count);
+                            (Application.Current.MainWindow as MainWindow).ship.ShipHp =
+                                hp_count == 0 ? 100 : hp_count;
+                        }
+                        else
+                        {
+                            WriteToConsole("Game ist started!", Brushes.Red);
+                        }
+                        break;
+                    }
                 case "giveammo":
                     {
                         if ((Application.Current.MainWindow as MainWindow).ship != null)

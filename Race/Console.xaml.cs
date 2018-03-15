@@ -22,6 +22,7 @@ namespace Race
         public Console()
         {
             InitializeComponent();
+            this.Loaded += Loaded_Console;
         }
 
         private void MainInput_KeyDown(object sender, KeyEventArgs e)
@@ -35,6 +36,12 @@ namespace Race
                 ConsoleMethod.RunConsoleCommand(command, param);
             }
         }
-        
+        private void Loaded_Console(object sender, EventArgs e)
+        {
+            MainInput.Text = "";
+            MainInput.Focus();
+        }
+
+
     }
 }

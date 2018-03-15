@@ -128,6 +128,121 @@ namespace Race
             }
         }
 
+        public static void AnimationShipDamage(StarShip ship)
+        {
+            BetterRandom RandForAnimaObst = new BetterRandom();
+            //List<Rectangle> ObstPieces = new List<Rectangle>();
+            int count_of_pieces = RandForAnimaObst.Between(1, 2);
+            for (int i = 0; i < count_of_pieces; i++)
+            {
+                // piece init
+                Ellipse piece = new Ellipse();
+                piece.Fill = RandForAnimaObst.Between(1, 2) == 1 ? Brushes.Red : Brushes.Yellow;
+                piece.Width = ship.shipRectangle.Width * 0.05;
+                piece.Name = "damage";
+                piece.Height = ship.shipRectangle.Height * 0.04;
+                
+                piece.Margin = new Thickness(
+                    ship.shipRectangle.Margin.Left + ship.shipRectangle.Width / 2,
+                    ship.shipRectangle.Margin.Top + ship.shipRectangle.Height / 2,
+                    0, 0
+                    );
+                //ObstPieces.Add(piece);
+                (Application.Current.MainWindow as MainWindow).MainCanvas.Children.Add(piece);
+
+                // piece animation
+                DoubleAnimation da_piece = new DoubleAnimation();
+                da_piece.From = 1; da_piece.To = 0;
+                da_piece.Duration = TimeSpan.FromSeconds(RandForAnimaObst.Between(2, 4));
+                da_piece.FillBehavior = FillBehavior.HoldEnd;
+                da_piece.Completed += (s, _) => AnimationShipDamageCompleted(piece);
+
+                ThicknessAnimation ta_piece = new ThicknessAnimation();
+                ta_piece.From = piece.Margin;
+                ta_piece.Duration = TimeSpan.FromSeconds(RandForAnimaObst.Between(2, 4));
+                double coord_x = Math.Cos(Math.PI / 180 * (RandForAnimaObst.Between((360 / count_of_pieces) * i, (360 / count_of_pieces) * (i + 1)) + 90));
+                double coord_y = Math.Cos(Math.PI / 180 * (RandForAnimaObst.Between((360 / count_of_pieces) * i, (360 / count_of_pieces) * (i + 1))));
+                ta_piece.To = new Thickness(
+                    piece.Margin.Left - (coord_x * RandForAnimaObst.Between(50, 100)),
+                    piece.Margin.Top - (coord_y * RandForAnimaObst.Between(50, 100)),
+                    0, 0
+                    );
+
+                piece.BeginAnimation(Rectangle.OpacityProperty, da_piece);
+                piece.BeginAnimation(Rectangle.MarginProperty, ta_piece);
+            }
+        }
+
+        public static void AnimationShipGameOver(StarShip ship)
+        {
+            BetterRandom RandForAnimaObst = new BetterRandom();
+            int count_of_pieces = RandForAnimaObst.Between(30, 40);
+            int count_of_repeat = RandForAnimaObst.Between(5, 10);
+            for (int j = 0; j < count_of_repeat; j++)
+            {
+                for (int i = 0; i < count_of_pieces; i++)
+                {
+                    // piece init
+                    Ellipse piece = new Ellipse();
+                    piece.Fill = RandForAnimaObst.Between(1, 2) == 1 ? Brushes.Red : Brushes.Yellow;
+                    piece.Width = RandForAnimaObst.Between((int)(ship.shipRectangle.Width * 0.1), (int)(ship.shipRectangle.Width * 0.4));
+                    piece.Name = "gameover";
+                    piece.Height = RandForAnimaObst.Between((int)(ship.shipRectangle.Height * 0.1), (int)(ship.shipRectangle.Height * 0.4));
+
+                    piece.Margin = new Thickness(
+                        ship.shipRectangle.Margin.Left + ship.shipRectangle.Width / 2,
+                        ship.shipRectangle.Margin.Top + ship.shipRectangle.Height / 2,
+                        0, 0
+                        );
+                    (Application.Current.MainWindow as MainWindow).MainCanvas.Children.Add(piece);
+
+                    // piece animation
+                    DoubleAnimation da_piece = new DoubleAnimation();
+                    da_piece.From = 1; da_piece.To = 0;
+                    da_piece.Duration = TimeSpan.FromSeconds(RandForAnimaObst.Between(2, 4));
+                    da_piece.FillBehavior = FillBehavior.HoldEnd;
+                    da_piece.Completed += (s, _) => AnimationShipDamageCompleted(piece);
+
+                    ThicknessAnimation ta_piece = new ThicknessAnimation();
+                    ta_piece.From = piece.Margin;
+                    ta_piece.Duration = TimeSpan.FromSeconds(RandForAnimaObst.Between(2, 4));
+                    double coord_x = Math.Cos(Math.PI / 180 * (RandForAnimaObst.Between((360 / count_of_pieces) * i, (360 / count_of_pieces) * (i + 1)) + 90));
+                    double coord_y = Math.Cos(Math.PI / 180 * (RandForAnimaObst.Between((360 / count_of_pieces) * i, (360 / count_of_pieces) * (i + 1))));
+                    ta_piece.To = new Thickness(
+                        piece.Margin.Left - (coord_x * RandForAnimaObst.Between(50, 100)),
+                        piece.Margin.Top - (coord_y * RandForAnimaObst.Between(50, 100)),
+                        0, 0
+                        );
+
+                    piece.BeginAnimation(Rectangle.OpacityProperty, da_piece);
+                    piece.BeginAnimation(Rectangle.MarginProperty, ta_piece);
+                }
+            }
+        }
+
+        public static void AnimationGameOver()
+        {
+            ThicknessAnimation ta = new ThicknessAnimation();
+            ta.From = new Thickness((
+                ((Application.Current.MainWindow as MainWindow).MainCanvas.ActualWidth / 2) -
+                ((Application.Current.MainWindow as MainWindow).Resources["GameOverPanel"] as StackPanel).Width / 2),
+                - (((Application.Current.MainWindow as MainWindow).Resources["GameOverPanel"] as StackPanel).Height + 10),
+                0,0
+                );
+            ta.To = new Thickness((
+                ((Application.Current.MainWindow as MainWindow).MainCanvas.ActualWidth / 2) -
+                ((Application.Current.MainWindow as MainWindow).Resources["GameOverPanel"] as StackPanel).Width / 2),
+                (Application.Current.MainWindow as MainWindow).MainCanvas.ActualHeight / 2
+                - (((Application.Current.MainWindow as MainWindow).Resources["GameOverPanel"] as StackPanel).Height / 2),
+                0, 0
+                );
+            ta.FillBehavior = FillBehavior.HoldEnd;
+            ta.Duration = TimeSpan.FromSeconds(5);
+            (Application.Current.MainWindow as MainWindow).MainCanvas.Children.Add(
+                (Application.Current.MainWindow as MainWindow).Resources["GameOverPanel"] as StackPanel
+                );
+            ((Application.Current.MainWindow as MainWindow).Resources["GameOverPanel"] as StackPanel).BeginAnimation(Ellipse.MarginProperty, ta);
+        }
 
 
 
@@ -137,6 +252,11 @@ namespace Race
         }
 
         private static void AnimationObstFiredCompleted(UIElement element)
+        {
+            (Application.Current.MainWindow as MainWindow).RemoveElementAfterAnimation(element);
+        }
+
+        private static void AnimationShipDamageCompleted(UIElement element)
         {
             (Application.Current.MainWindow as MainWindow).RemoveElementAfterAnimation(element);
         }

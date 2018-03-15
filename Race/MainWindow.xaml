@@ -11,6 +11,12 @@
         WindowStyle="ToolWindow" KeyDown="Window_KeyDown" KeyUp="Window_KeyUp">
     <Window.Resources>
         <local:DataConvertors x:Key="myDateConverter" />
+        <StackPanel x:Key="GameOverPanel" Orientation="Vertical" Width="447" Height="196">
+            <Label Content="Game Over" Foreground="White"
+                   FontSize="100" FontFamily="Impact"/>
+            <Button Content="AGAIN?" Margin="5" Click="Start_Click" />
+            <Button Content="QUIT" Margin="5" Click="Quit_Click" />
+        </StackPanel>
     </Window.Resources>
     <Grid Background="Black">
         <Grid.RowDefinitions>
