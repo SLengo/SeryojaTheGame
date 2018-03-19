@@ -38,6 +38,7 @@ namespace Race
 
         double health_point;
         double ammo_point;
+        int ship_score = 0;
         public double ShipHp
         {
             get { return health_point; }
@@ -54,6 +55,15 @@ namespace Race
             {
                 ammo_point = value;
                 OnPropertyChanged("ShipAmmo");
+            }
+        }
+        public int ShipScore
+        {
+            get { return ship_score; }
+            set
+            {
+                ship_score = value;
+                OnPropertyChanged("ShipScore");
             }
         }
 

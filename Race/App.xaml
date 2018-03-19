@@ -11,5 +11,7 @@
         <Image x:Key="HpBonus" Source="images/health_bonus.png" />
         <Image x:Key="AmmoBonus" Source="images/laser_bonus.png" />
         <Image x:Key="falcone" Source="images/UpperHull.png" />
+        
+        
     </Application.Resources>
 </Application>

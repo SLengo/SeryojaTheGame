@@ -29,6 +29,8 @@ namespace Race
         DispatcherTimer BonusGeneratorTimer;
         BetterRandom RandForSomethings;
 
+        public int Score;
+
         public StarShip ship;
         public Stars stars;
 
@@ -69,6 +71,7 @@ namespace Race
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             ConsoleMethod.WriteToConsole("Game window loaded", Brushes.White);
+            Sounds.PlayBackGround();
             stars = new Stars(this);
         }
 
@@ -82,6 +85,8 @@ namespace Race
                     break;
                 }
             }
+            if (ship != null) Sounds.PlayBackGround();
+            Sounds.GameOverSoundStop();
             this.DataContext = null;
             ship = null;
             ship = new StarShip(this);
@@ -96,6 +101,8 @@ namespace Race
 
         private void GameOver()
         {
+            Sounds.StopBackGround();
+            Sounds.ShipDestroySoundPlay();
             AnimationsRace.AnimationShipGameOver(ship);
             RemoveElementAfterAnimation(ship.shipRectangle);
             BonusGeneratorTimer.Stop();
@@ -108,6 +115,7 @@ namespace Race
                 RemoveElementAfterAnimation(item.ObstToCanvas);
             }
             CurrentObsts.Clear();
+            Sounds.GameOverSoundPlay();
             AnimationsRace.AnimationGameOver();
         }
 
@@ -123,6 +131,7 @@ namespace Race
 
         private void BonusGeneratorTimerTick(object sender, EventArgs e)
         {
+            ship.ShipScore += 1;
             if(RandForSomethings.Between(0,5) == 1)
             {
                 if (RandForSomethings.Between(0, 1) == 0)
@@ -149,8 +158,9 @@ namespace Race
                 {
                     ConsoleMethod.WriteToConsole("Obst number " + i + " hitted!", Brushes.White);
                     ship.ShipHp = ship.ShipHp - CurrentObsts[i].ObstDamage <= 0 ?
-                        0 : ship.ShipHp - CurrentObsts[i].ObstDamage;
+                        0 : (int)(ship.ShipHp - CurrentObsts[i].ObstDamage);
                     AnimationsRace.AnimationShipDamage(ship);
+                    Sounds.ShipDamageSoundPlay();
                     if(ship.ShipHp == 0)
                     {
                         GameOver();
@@ -167,11 +177,13 @@ namespace Race
                         ship.GetHitBoxFire(ship.CurrentAmmos[i])) &&
                         !CurrentObsts[j].Hitted)
                     {
+                        ship.ShipScore += 10;
                         ConsoleMethod.WriteToConsole("Obst number " + j + " fired by bullet number "+ i + "!", Brushes.White);
                         CurrentObsts[j].Hitted = true;
                         CurrentObsts[j].ObstacleFiredAnimation();
                         RemoveElementAfterAnimation(CurrentObsts[j].ObstToCanvas);
                         CurrentObsts.Remove(CurrentObsts[j]);
+                        Sounds.ObstDamageSoundPlay();
                     }
                 }
             }
@@ -186,13 +198,17 @@ namespace Race
                     {
                         ConsoleMethod.WriteToConsole("Ammo Bonus obtained!", Brushes.White);
                         ship.ShipAmmo += (CurrentBonuses[i] as AmmoBonus).ammo_count;
+                        Sounds.LaserBonusSoundPlay();
                     }
                     else if (CurrentBonuses[i] is HealthBonus)
                     {
                         ConsoleMethod.WriteToConsole("HP Bonus obtained!", Brushes.White);
                         if (ship.ShipHp < 100)
+                        {
                             ship.ShipHp = ship.ShipHp + (CurrentBonuses[i] as HealthBonus).health_count >= 100 ?
                                 100 : ship.ShipHp + (CurrentBonuses[i] as HealthBonus).health_count;
+                            Sounds.HpBonusSoundPlay();
+                        }
                         else
                             continue;
                     }
@@ -324,6 +340,14 @@ namespace Race
                     }
                 case Key.Space:
                     {
+                        if (ship.ShipAmmo > 0)
+                        {
+                            Sounds.LaserShootSoundPlay();
+                        }
+                        else
+                        {
+                            Sounds.EmpLaserSoundPlay();
+                        }
                         spacepress = true;
                         break;
                     }

@@ -66,6 +66,7 @@
     <Compile Include="DataConvertors.cs" />
     <Compile Include="HealthBonus.cs" />
     <Compile Include="Obstacle.cs" />
+    <Compile Include="Sounds.cs" />
     <Compile Include="Stars.cs" />
     <Compile Include="StarShip.cs" />
     <Page Include="Console.xaml">
@@ -134,6 +135,21 @@
   <ItemGroup>
     <Resource Include="images\health_bonus.png" />
     <Resource Include="images\laser_bonus.png" />
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <Content Include="sounds\background_music.wav">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="sounds\game_over.wav" />
+    <Content Include="sounds\hp_bonus.wav" />
+    <Content Include="sounds\laser_bonus.wav" />
+    <Content Include="sounds\laser_shoot.wav">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="sounds\obst_damage.wav" />
+    <Content Include="sounds\ship_damage.wav" />
+    <Content Include="sounds\ship_destroy.wav" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

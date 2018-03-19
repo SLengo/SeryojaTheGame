@@ -11,9 +11,17 @@
         WindowStyle="ToolWindow" KeyDown="Window_KeyDown" KeyUp="Window_KeyUp">
     <Window.Resources>
         <local:DataConvertors x:Key="myDateConverter" />
-        <StackPanel x:Key="GameOverPanel" Orientation="Vertical" Width="447" Height="196">
+        <StackPanel x:Key="GameOverPanel" Orientation="Vertical" Width="447" Height="350">
             <Label Content="Game Over" Foreground="White"
                    FontSize="100" FontFamily="Impact"/>
+            <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center">
+                <TextBlock Foreground="White" Text="Your score"
+                   FontSize="75" FontFamily="Impact"/>
+                <TextBlock Foreground="White" Margin="10,0,0,0"
+                           Text="{Binding Path=ShipScore, UpdateSourceTrigger=PropertyChanged}"
+                   FontSize="75" FontFamily="Impact"/>    
+            </StackPanel>
+            
             <Button Content="AGAIN?" Margin="5" Click="Start_Click" />
             <Button Content="QUIT" Margin="5" Click="Quit_Click" />
         </StackPanel>
@@ -23,19 +31,27 @@
             <RowDefinition Height="50" />
             <RowDefinition  />
         </Grid.RowDefinitions>
-        <Border BorderThickness="2" Panel.ZIndex="2" Name="StatusBar" Visibility="Hidden" BorderBrush="#cccdce">
+        <Border BorderThickness="2" Panel.ZIndex="2" Name="StatusBar" Visibility="Collapsed" BorderBrush="#cccdce">
             <StackPanel Background="Black" Orientation="Horizontal"
                         Panel.ZIndex="2">
                 <StackPanel Orientation="Horizontal">
                     <Image Height="50" gif:ImageBehavior.AnimatedSource="images/hp_heart.gif" />
-                    <TextBlock Name="HpValue" Foreground="White" Width="70"
+                    <TextBlock Name="HpValue" Foreground="White" Width="70" FontFamily="Impact"
                                Text="{Binding Path=ShipHp, UpdateSourceTrigger=PropertyChanged}" FontSize="35" />
                 </StackPanel>
                 <StackPanel Margin="25,0,0,0" Orientation="Horizontal">
                     <Image Height="50" gif:ImageBehavior.AnimatedSource="images/redsparkle.gif" />
-                    <TextBlock Name="AmmoValue" Foreground="White"
+                    <TextBlock Name="AmmoValue" Foreground="White" FontFamily="Impact"
                                Text="{Binding Path=ShipAmmo, UpdateSourceTrigger=PropertyChanged}" FontSize="35" />
                 </StackPanel>
+
+                <StackPanel Margin="100,0,0,0" Orientation="Horizontal">
+                    <TextBlock Text="Score" Foreground="White" FontSize="35"
+                               FontFamily="Impact"/>
+                    <TextBlock Margin="10,0,0,0" Name="ScoreValue" Foreground="White" FontFamily="Impact"
+                               Text="{Binding Path=ShipScore, UpdateSourceTrigger=PropertyChanged}" FontSize="35" />
+                </StackPanel>
+
             </StackPanel>
         </Border>
 
