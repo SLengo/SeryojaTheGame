@@ -271,24 +271,25 @@ namespace Race
         }
         private void KeyTrackTimerTimerTick(object sender, EventArgs e)
         {
+            if (!CheckShipHBToCanvasBorder()) return;
+
             if (leftpress)
             {
-                if (!CheckShipHBToCanvasBorder()) return;
                 ship.ShipLeft();
             }
             else if (rightpress)
             {
-                if (!CheckShipHBToCanvasBorder()) return;
+                //if (!CheckShipHBToCanvasBorder()) return;
                 ship.ShipRight();
             }
             else if (uppress)
             {
-                if (!CheckShipHBToCanvasBorder()) return;
+                //if (!CheckShipHBToCanvasBorder()) return;
                 ship.ShipUp();
             }
             else if (downpress)
             {
-                if (!CheckShipHBToCanvasBorder()) return;
+                //if (!CheckShipHBToCanvasBorder()) return;
                 ship.ShipDown();
             }
             else if (spacepress)
