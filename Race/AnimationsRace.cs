@@ -223,15 +223,12 @@ namespace Race
         public static void AnimationGameOver()
         {
             ThicknessAnimation ta = new ThicknessAnimation();
-            ta.From = new Thickness((
-                ((Application.Current.MainWindow as MainWindow).MainCanvas.ActualWidth / 2) -
-                ((Application.Current.MainWindow as MainWindow).Resources["GameOverPanel"] as StackPanel).Width / 2),
+            ta.From = new Thickness(
+                                    0,
                 - (((Application.Current.MainWindow as MainWindow).Resources["GameOverPanel"] as StackPanel).Height + 10),
                 0,0
                 );
-            ta.To = new Thickness((
-                ((Application.Current.MainWindow as MainWindow).MainCanvas.ActualWidth / 2) -
-                ((Application.Current.MainWindow as MainWindow).Resources["GameOverPanel"] as StackPanel).Width / 2),
+            ta.To = new Thickness(0,
                 (Application.Current.MainWindow as MainWindow).MainCanvas.ActualHeight / 2
                 - (((Application.Current.MainWindow as MainWindow).Resources["GameOverPanel"] as StackPanel).Height / 2),
                 0, 0

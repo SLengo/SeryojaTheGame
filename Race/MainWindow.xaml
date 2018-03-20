@@ -11,13 +11,17 @@
         WindowStyle="ToolWindow" KeyDown="Window_KeyDown" KeyUp="Window_KeyUp">
     <Window.Resources>
         <local:DataConvertors x:Key="myDateConverter" />
-        <StackPanel x:Key="GameOverPanel" Orientation="Vertical" Width="447" Height="350">
-            <Label Content="Game Over" Foreground="White"
-                   FontSize="100" FontFamily="Impact"/>
+        <StackPanel x:Key="GameOverPanel" Orientation="Vertical" HorizontalAlignment="Center"
+                    VerticalAlignment="Center" Height="400"
+                    Width="{Binding ElementName=MainCanvas, Path=ActualWidth}">
+            <StackPanel HorizontalAlignment="Center">
+                <TextBlock Text="Game Over" Foreground="White"
+                   FontSize="100" Margin="10,0,0,0" FontFamily="Impact"/>
+            </StackPanel>
             <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center">
                 <TextBlock Foreground="White" Text="Your score"
                    FontSize="75" FontFamily="Impact"/>
-                <TextBlock Foreground="White" Margin="10,0,0,0"
+                <TextBlock Foreground="White" Margin="10,0,0,0" Name="YourScoreBlock"
                            Text="{Binding Path=ShipScore, UpdateSourceTrigger=PropertyChanged}"
                    FontSize="75" FontFamily="Impact"/>    
             </StackPanel>

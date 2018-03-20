@@ -29,7 +29,10 @@ namespace Race
         DispatcherTimer BonusGeneratorTimer;
         BetterRandom RandForSomethings;
 
+        int obst_cout_increasing_for_up_difficulty = 5; // 5 - start difficulty
+
         public int Score;
+        int prev_ship_score = 0;
 
         public StarShip ship;
         public Stars stars;
@@ -121,7 +124,7 @@ namespace Race
 
         private void ObstsGeneratorTimerTick(object sender, EventArgs e)
         {
-            for (int i = 0; i < 5; i++)
+            for (int i = 0; i < obst_cout_increasing_for_up_difficulty; i++)
             {
                 Obstacle obst = new Obstacle(this);
                 CurrentObsts.Add(obst);
@@ -131,6 +134,15 @@ namespace Race
 
         private void BonusGeneratorTimerTick(object sender, EventArgs e)
         {
+            // up difficulty
+            if(ship.ShipScore > prev_ship_score + 500 && obst_cout_increasing_for_up_difficulty < 15)
+            {
+                prev_ship_score = ship.ShipScore;
+                obst_cout_increasing_for_up_difficulty += 2;
+                ConsoleMethod.WriteToConsole("Difficulty up! Now " + obst_cout_increasing_for_up_difficulty, Brushes.Green);
+            }
+
+
             ship.ShipScore += 1;
             if(RandForSomethings.Between(0,5) == 1)
             {
@@ -223,22 +235,60 @@ namespace Race
             MainCanvas.Children.Remove(element);
         }
 
+        private bool CheckShipHBToCanvasBorder()
+        {
+            if (ship.ShipRectangle.Margin.Left <= 0)
+            {
+                ship.ShipRectangle.Margin = new Thickness(
+                    1, ship.ShipRectangle.Margin.Top, 0,0
+                    );
+                return false;
+            }
+            else if (ship.ShipRectangle.Margin.Left + ship.ShipRectangle.Width >= MainCanvas.ActualWidth)
+            {
+                ship.ShipRectangle.Margin = new Thickness(
+                    MainCanvas.ActualWidth - ship.ShipRectangle.Width - 1, ship.ShipRectangle.Margin.Top, 0, 0
+                    );
+                return false;
+            }
+            else if (ship.ShipRectangle.Margin.Top <= 0)
+            {
+                ship.ShipRectangle.Margin = new Thickness(
+                    ship.ShipRectangle.Margin.Left,
+                    1, 0, 0
+                    );
+                return false;
+            }
+            else if (ship.ShipRectangle.Margin.Top + ship.ShipRectangle.Height >= MainCanvas.ActualHeight)
+            {
+                ship.ShipRectangle.Margin = new Thickness(
+                    ship.ShipRectangle.Margin.Left,
+                    MainCanvas.ActualHeight - ship.ShipRectangle.Height - 1, 0, 0
+                    );
+                return false;
+            }
+            return true;
+        }
         private void KeyTrackTimerTimerTick(object sender, EventArgs e)
         {
             if (leftpress)
             {
+                if (!CheckShipHBToCanvasBorder()) return;
                 ship.ShipLeft();
             }
             else if (rightpress)
             {
+                if (!CheckShipHBToCanvasBorder()) return;
                 ship.ShipRight();
             }
             else if (uppress)
             {
+                if (!CheckShipHBToCanvasBorder()) return;
                 ship.ShipUp();
             }
             else if (downpress)
             {
+                if (!CheckShipHBToCanvasBorder()) return;
                 ship.ShipDown();
             }
             else if (spacepress)

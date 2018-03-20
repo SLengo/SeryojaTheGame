@@ -19,10 +19,13 @@ namespace Race
     /// </summary>
     public partial class Console : Window
     {
+        int itsFirstOn = 0;
+
         public Console()
         {
             InitializeComponent();
             this.Loaded += Loaded_Console;
+            MainInput.TextChanged += MainInput_ch;
         }
 
         private void MainInput_KeyDown(object sender, KeyEventArgs e)
@@ -36,12 +39,25 @@ namespace Race
                 ConsoleMethod.RunConsoleCommand(command, param);
             }
         }
+        private void MainInput_ch(object sender, EventArgs e)
+        {
+            if (itsFirstOn == 0)
+            {
+                MainInput.Clear();
+                itsFirstOn = 1;
+            }
+        }
         private void Loaded_Console(object sender, EventArgs e)
         {
-            MainInput.Text = "";
             MainInput.Focus();
         }
 
-
+        private void Window_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Oem3)
+            {
+                this.Close();
+            }
+        }
     }
 }

@@ -51,6 +51,12 @@ namespace Race
             BackGroundMediaPlayer = new MediaPlayer();
             BackGroundMediaPlayer.Open(new Uri(AppDomain.CurrentDomain.BaseDirectory + BackGroundSoundUri));
             BackGroundMediaPlayer.Volume = 50;
+            BackGroundMediaPlayer.MediaEnded += Media_Ended;
+            BackGroundMediaPlayer.Play();
+        }
+        private static void Media_Ended(object sender, EventArgs e)
+        {
+            BackGroundMediaPlayer.Position = TimeSpan.Zero;
             BackGroundMediaPlayer.Play();
         }
         public static void StopBackGround()

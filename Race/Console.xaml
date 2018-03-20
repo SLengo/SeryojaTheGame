@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Race"
         mc:Ignorable="d" WindowStyle="ToolWindow"
-        Title="Console" Height="300" Width="500">
+        Title="Console" Height="300" Width="500" KeyDown="Window_KeyDown">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition/>
