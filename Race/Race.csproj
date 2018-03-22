@@ -141,6 +141,10 @@
     <Resource Include="images\seryoja_happy.png" />
     <Resource Include="images\seryoja_mouth_close.png" />
     <Resource Include="images\seryoja_mouth_open.png" />
+    <Resource Include="images\cloud_1.png" />
+    <Resource Include="images\cloud_2.png" />
+    <Resource Include="images\cloud_3.png" />
+    <Resource Include="images\r_fire.png" />
     <Content Include="sounds\background_music.wav">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

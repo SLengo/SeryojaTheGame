@@ -79,7 +79,7 @@ namespace Race
         }
 
 
-        public List<Ellipse> CurrentAmmos = null;
+        public List<Rectangle> CurrentAmmos = null;
 
 
         double rotate_speed = 5;
@@ -93,7 +93,7 @@ namespace Race
             _mainWindow = mainWindow;
             health_point = 100;
             ammo_point = 250;
-            CurrentAmmos = new List<Ellipse>();
+            CurrentAmmos = new List<Rectangle>();
             ShipRectangle = new Rectangle();
             VisualBrush vb = new VisualBrush();
             vb.Visual = (Visual)Application.Current.Resources["seryoja_mouth_close"];
@@ -132,13 +132,16 @@ namespace Race
         {
             if (ShipAmmo <= 0) return;
             double coord_y = fire_speed;
-            Ellipse fire = new Ellipse();
-            fire.Width = 3; fire.Height = 3;
-            fire.Fill = Brushes.Red;
+            Rectangle fire = new Rectangle();
+            fire.Width = 20; fire.Height = 20;
+            VisualBrush vb = new VisualBrush();
+            vb.Visual = (Visual)Application.Current.Resources["r_fire"];
+            fire.Fill = vb;
+            fire.OpacityMask = vb;
             fire.Name = "bullet";
             fire.Margin = new Thickness(
-                ShipRectangle.Margin.Left + ShipRectangle.Width / 2 + 7,
-                ShipRectangle.Margin.Top + ShipRectangle.Height / 2 + 2,
+                ShipRectangle.Margin.Left + ShipRectangle.Width / 2,
+                ShipRectangle.Margin.Top + ShipRectangle.Height / 2 - 10,
                 ShipRectangle.Margin.Right,
                 ShipRectangle.Margin.Bottom
                 );
@@ -147,7 +150,7 @@ namespace Race
             CurrentAmmos.Add(fire);
             ShipAmmo--;
         }
-        public Rect GetHitBoxFire(Ellipse fire_hb)
+        public Rect GetHitBoxFire(Rectangle fire_hb)
         {
             Rect FireHitBox = new Rect();
             FireHitBox.Width = fire_hb.Width;

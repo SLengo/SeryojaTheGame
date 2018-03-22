@@ -18,7 +18,7 @@ namespace Race
 {
     public class Stars
     {
-        public List<Ellipse> AllStars;
+        public List<Rectangle> AllStars;
         BetterRandom RandGenerator;
         MainWindow _mainWindow;
 
@@ -28,39 +28,29 @@ namespace Race
         {
             _mainWindow = mainWindow;
             RandGenerator = new BetterRandom();
-            AllStars = new List<Ellipse>();
+            AllStars = new List<Rectangle>();
             StarTimer = new DispatcherTimer();
-            StarTimer.Interval = TimeSpan.FromMilliseconds(500);
+            StarTimer.Interval = TimeSpan.FromMilliseconds(8);
             StarTimer.Tick += StarTimerTick;
             StarTimer.Start();
-
-            int starscount = RandGenerator.Between(50,100);
-            for (int i = 0; i < starscount; i++)
-            {
-                Ellipse ell = new Ellipse();
-                ell.Fill = Brushes.White;
-                ell.Name = "star_ellipse";
-                ell.Width = 2; ell.Height = 2;
-                ell.Margin = new Thickness(
-                    RandGenerator.Between(0, (int)_mainWindow.MainCanvas.ActualWidth),
-                    RandGenerator.Between(0, (int)_mainWindow.MainCanvas.ActualHeight),
-                    ell.Margin.Top,
-                    ell.Margin.Bottom
-                    );
-                AllStars.Add(ell);
-                _mainWindow.MainCanvas.Children.Add(ell);
-            }
         }
         private void StarTimerTick(object sender, EventArgs e)
         {
-            int starscount = RandGenerator.Between(25, 25);
+            StarTimer.Interval = TimeSpan.FromSeconds(25);
+            int starscount = RandGenerator.Between(2, 3);
             for (int i = 0; i < starscount; i++)
             {
-                Ellipse ell = new Ellipse();
-                ell.Fill = Brushes.White;
-                ell.Width = 2; ell.Height = 2;
+                Rectangle ell = new Rectangle();
+                VisualBrush vb = new VisualBrush();
+                vb.Opacity = RandGenerator.Between(10, 40);
+                vb.Visual = (Visual)Application.Current.Resources["cloud_" + Convert.ToString(RandGenerator.Between(1, 3))];
+                ell.Fill = vb;
+                ell.OpacityMask = vb;
+                ell.Name = "star_ellipse";
+                ell.Width = RandGenerator.Between(100, 200);
+                ell.Height = RandGenerator.Between(40, 60);
                 ell.Margin = new Thickness(
-                    RandGenerator.Between(0, (int)_mainWindow.MainCanvas.ActualWidth),
+                    RandGenerator.Between((int)ell.Width, (int)(_mainWindow.MainCanvas.ActualWidth - ell.Width)),
                     RandGenerator.Between(-(int)_mainWindow.MainCanvas.ActualHeight / 2, 0),
                     ell.Margin.Top,
                     ell.Margin.Bottom

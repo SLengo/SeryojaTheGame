@@ -32,8 +32,9 @@ namespace Race
             bonus.bonus_rectangle.BeginAnimation(Ellipse.MarginProperty, ta_bonus);
         }
 
-        public static void AnimationStars(List<Ellipse> stars)
+        public static void AnimationStars(List<Rectangle> stars)
         {
+            BetterRandom rand = new BetterRandom();
             for (int i = 0; i < stars.Count; i++)
             {
                 ThicknessAnimation ta_stars = new ThicknessAnimation();
@@ -42,8 +43,8 @@ namespace Race
                     Application.Current.MainWindow.ActualHeight - stars[i].Margin.Top + stars[i].Width;
                 ta_stars.To = new Thickness(stars[i].Margin.Left, stars[i].Margin.Top + stars_to, stars[i].Margin.Right, stars[i].Margin.Bottom);
                 ta_stars.FillBehavior = FillBehavior.HoldEnd;
-                ta_stars.Duration = TimeSpan.FromSeconds(Math.Abs(stars_to) / 150);
-                Ellipse curr_ell = stars[i];
+                ta_stars.Duration = TimeSpan.FromSeconds(rand.Between(20,30));
+                Rectangle curr_ell = stars[i];
                 ta_stars.Completed += (s, _) => AnimationStarsCompleted(curr_ell);
                 stars[i].BeginAnimation(Ellipse.MarginProperty, ta_stars);
             }
@@ -63,7 +64,7 @@ namespace Race
             obst.ObstToCanvas.BeginAnimation(Ellipse.MarginProperty, ta_obst);
         }
 
-        public static void AnimationBulletfire(Ellipse fire, Rectangle ShipRectangle, double coord_y)
+        public static void AnimationBulletfire(Rectangle fire, Rectangle ShipRectangle, double coord_y)
         {
             ThicknessAnimation ta_fire = new ThicknessAnimation();
             ta_fire.From = fire.Margin;
@@ -75,7 +76,7 @@ namespace Race
                 );
             ta_fire.Duration = TimeSpan.FromMilliseconds(1000);
             ta_fire.Completed += (s, _) => AnimationBulletfireCompleted(fire);
-            fire.BeginAnimation(Ellipse.MarginProperty, ta_fire);
+            fire.BeginAnimation(Rectangle.MarginProperty, ta_fire);
         }
 
         public static void AnimationObstFired(Obstacle obst)
@@ -260,7 +261,7 @@ namespace Race
 
         private static void AnimationBulletfireCompleted(UIElement element)
         {
-            (Application.Current.MainWindow as MainWindow).ship.CurrentAmmos.Remove(element as Ellipse);
+            (Application.Current.MainWindow as MainWindow).ship.CurrentAmmos.Remove(element as Rectangle);
             (Application.Current.MainWindow as MainWindow).RemoveElementAfterAnimation(element);
         }
 
@@ -268,7 +269,7 @@ namespace Race
         {
             try
             {
-                (Application.Current.MainWindow as MainWindow).stars.AllStars.Remove(element as Ellipse);
+                (Application.Current.MainWindow as MainWindow).stars.AllStars.Remove(element as Rectangle);
                 (Application.Current.MainWindow as MainWindow).RemoveElementAfterAnimation(element);
             }
             catch { }

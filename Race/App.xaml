@@ -16,5 +16,10 @@
         <Image x:Key="seryoja_mouth_close" Source="images/seryoja_mouth_close.png" />
         <Image x:Key="seryoja_mouth_open" Source="images/seryoja_mouth_open.png" />
 
+        <Image x:Key="cloud_1" Source="images/cloud_1.png" />
+        <Image x:Key="cloud_2" Source="images/cloud_2.png" />
+        <Image x:Key="cloud_3" Source="images/cloud_3.png" />
+
+        <Image x:Key="r_fire" Source="images/r_fire.png" />
     </Application.Resources>
 </Application>

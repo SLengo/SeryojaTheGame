@@ -75,7 +75,7 @@ namespace Race
         {
             ConsoleMethod.WriteToConsole("Game window loaded", Brushes.White);
             Sounds.PlayBackGround();
-            //stars = new Stars(this);
+            stars = new Stars(this);
         }
 
         private void InitGame()
