@@ -138,6 +138,9 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
+    <Resource Include="images\seryoja_happy.png" />
+    <Resource Include="images\seryoja_mouth_close.png" />
+    <Resource Include="images\seryoja_mouth_open.png" />
     <Content Include="sounds\background_music.wav">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

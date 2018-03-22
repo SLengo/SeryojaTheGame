@@ -39,6 +39,8 @@ namespace Race
         double health_point;
         double ammo_point;
         int ship_score = 0;
+        VisualBrush ship_sprite;
+
         public double ShipHp
         {
             get { return health_point; }
@@ -66,6 +68,15 @@ namespace Race
                 OnPropertyChanged("ShipScore");
             }
         }
+        public VisualBrush ShipSprite
+        {
+            get { return ship_sprite; }
+            set
+            {
+                ship_sprite = value;
+                OnPropertyChanged("ShipSprite");
+            }
+        }
 
 
         public List<Ellipse> CurrentAmmos = null;
@@ -73,6 +84,7 @@ namespace Race
 
         double rotate_speed = 5;
         double movement_speed = 3;
+        double fire_speed = 1;
 
         double Angle = 0;
 
@@ -84,11 +96,12 @@ namespace Race
             CurrentAmmos = new List<Ellipse>();
             ShipRectangle = new Rectangle();
             VisualBrush vb = new VisualBrush();
-            vb.Visual = (Visual)Application.Current.Resources["falcone"];
-            ShipRectangle.Fill = vb;
+            vb.Visual = (Visual)Application.Current.Resources["seryoja_mouth_close"];
+            ShipSprite = vb;
+            ShipRectangle.Fill = ShipSprite;
             ShipRectangle.Name = "Millenniumfalcon";
             ShipRectangle.Width = 50;
-            ShipRectangle.Height = 60;
+            ShipRectangle.Height = 75;
             ShipRectangle.Margin = new Thickness(_mainWindow.MainCanvas.ActualWidth / 2 - ShipRectangle.Width / 2,
                 _mainWindow.MainCanvas.ActualHeight - ShipRectangle.Height - 25,
                 0,0);
@@ -118,20 +131,19 @@ namespace Race
         public void ShipFire()
         {
             if (ShipAmmo <= 0) return;
-            double coord_x = Math.Cos(Math.PI / 180 * (Angle + 90));
-            double coord_y = Math.Cos(Math.PI / 180 * (Angle));
+            double coord_y = fire_speed;
             Ellipse fire = new Ellipse();
             fire.Width = 3; fire.Height = 3;
             fire.Fill = Brushes.Red;
             fire.Name = "bullet";
             fire.Margin = new Thickness(
-                ShipRectangle.Margin.Left + ShipRectangle.Width / 2,
-                ShipRectangle.Margin.Top + ShipRectangle.Height / 2,
+                ShipRectangle.Margin.Left + ShipRectangle.Width / 2 + 7,
+                ShipRectangle.Margin.Top + ShipRectangle.Height / 2 + 2,
                 ShipRectangle.Margin.Right,
                 ShipRectangle.Margin.Bottom
                 );
             (Application.Current.MainWindow as MainWindow).MainCanvas.Children.Add(fire);
-            AnimationsRace.AnimationBulletfire(fire, shipRectangle, coord_x, coord_y);
+            AnimationsRace.AnimationBulletfire(fire, shipRectangle, coord_y);
             CurrentAmmos.Add(fire);
             ShipAmmo--;
         }
@@ -146,20 +158,11 @@ namespace Race
         }
 
         public void ShipUp()
-        {
-            double diff_angle = 90;
-            //if ((Angle > 270 && Angle <= 360) || (Angle >= 0 && Angle < 90))
-            //    diff_angle = 90;
-            ////else if (Angle < 270 && Angle >=180)
-            ////    diff_angle = 180;
-            ////else if (Angle >= 90 && Angle < 180)
-            ////    diff_angle = 90;
-
-            double coord_x = Math.Cos(Math.PI / 180 * (Angle + diff_angle)) * movement_speed;
-            double coord_y = Math.Cos(Math.PI / 180 * (Angle)) * movement_speed;
+        { 
+            double coord_y = movement_speed;
             
             Thickness coords = new Thickness(
-                ShipRectangle.Margin.Left - coord_x,
+                ShipRectangle.Margin.Left,
                 ShipRectangle.Margin.Top - coord_y,
                 ShipRectangle.Margin.Right,
                 ShipRectangle.Margin.Bottom
@@ -170,11 +173,10 @@ namespace Race
         }
         public void ShipDown()
         {
-            double coord_x = Math.Cos(Math.PI / 180 * (Angle + 90)) * movement_speed;
-            double coord_y = Math.Cos(Math.PI / 180 * (Angle)) * movement_speed;
+            double coord_y = movement_speed;
 
             Thickness coords = new Thickness(
-                ShipRectangle.Margin.Left + coord_x,
+                ShipRectangle.Margin.Left,
                 ShipRectangle.Margin.Top + coord_y,
                 ShipRectangle.Margin.Right,
                 ShipRectangle.Margin.Bottom
@@ -184,22 +186,28 @@ namespace Race
         }
         public void ShipRight()
         {
-            Angle = Angle + rotate_speed >= 360 ? 0 : Angle + rotate_speed;
-            RotateTransform myRotateTransform = new RotateTransform();
-            myRotateTransform.Angle = Angle;
-            myRotateTransform.CenterX = ShipRectangle.Width / 2;
-            myRotateTransform.CenterY = ShipRectangle.Height / 2;
-            ShipRectangle.RenderTransform = myRotateTransform;
+            double coord_x = movement_speed;
+
+            Thickness coords = new Thickness(
+                ShipRectangle.Margin.Left + coord_x,
+                ShipRectangle.Margin.Top,
+                ShipRectangle.Margin.Right,
+                ShipRectangle.Margin.Bottom
+                );
+            ShipRectangle.Margin = coords;
             ShipRectangle = shipRectangle;
         }
         public void ShipLeft()
         {
-            Angle = Angle - rotate_speed <= 0 ? 360 : Angle - rotate_speed;
-            RotateTransform myRotateTransform = new RotateTransform();
-            myRotateTransform.Angle = Angle;
-            myRotateTransform.CenterX = ShipRectangle.Width / 2;
-            myRotateTransform.CenterY = ShipRectangle.Height / 2;
-            ShipRectangle.RenderTransform = myRotateTransform;
+            double coord_x = movement_speed;
+
+            Thickness coords = new Thickness(
+                ShipRectangle.Margin.Left - coord_x,
+                ShipRectangle.Margin.Top,
+                ShipRectangle.Margin.Right,
+                ShipRectangle.Margin.Bottom
+                );
+            ShipRectangle.Margin = coords;
             ShipRectangle = shipRectangle;
         }
 

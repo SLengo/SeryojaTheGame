@@ -63,12 +63,12 @@ namespace Race
             obst.ObstToCanvas.BeginAnimation(Ellipse.MarginProperty, ta_obst);
         }
 
-        public static void AnimationBulletfire(Ellipse fire, Rectangle ShipRectangle, double coord_x, double coord_y)
+        public static void AnimationBulletfire(Ellipse fire, Rectangle ShipRectangle, double coord_y)
         {
             ThicknessAnimation ta_fire = new ThicknessAnimation();
             ta_fire.From = fire.Margin;
             ta_fire.To = new Thickness(
-                fire.Margin.Left - coord_x * (Application.Current.MainWindow as MainWindow).MainCanvas.ActualWidth,
+                fire.Margin.Left,
                 fire.Margin.Top - coord_y * (Application.Current.MainWindow as MainWindow).MainCanvas.ActualHeight,
                 fire.Margin.Right,
                 fire.Margin.Bottom

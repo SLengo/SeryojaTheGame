@@ -59,7 +59,7 @@
             </StackPanel>
         </Border>
 
-        <Canvas Grid.Row="1" Name="MainCanvas" Background="Black" x:FieldModifier="public">
+        <Canvas Grid.Row="1" Name="MainCanvas" Background="AliceBlue" x:FieldModifier="public">
         </Canvas>
         
         <StackPanel Grid.Row="1" Name="Menu" HorizontalAlignment="Center" VerticalAlignment="Center" Orientation="Vertical">

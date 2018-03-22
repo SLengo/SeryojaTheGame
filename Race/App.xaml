@@ -11,7 +11,10 @@
         <Image x:Key="HpBonus" Source="images/health_bonus.png" />
         <Image x:Key="AmmoBonus" Source="images/laser_bonus.png" />
         <Image x:Key="falcone" Source="images/UpperHull.png" />
-        
-        
+
+        <Image x:Key="seryoja_happy" Source="images/seryoja_happy.png" />
+        <Image x:Key="seryoja_mouth_close" Source="images/seryoja_mouth_close.png" />
+        <Image x:Key="seryoja_mouth_open" Source="images/seryoja_mouth_open.png" />
+
     </Application.Resources>
 </Application>

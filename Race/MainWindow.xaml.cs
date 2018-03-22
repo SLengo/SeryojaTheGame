@@ -75,7 +75,7 @@ namespace Race
         {
             ConsoleMethod.WriteToConsole("Game window loaded", Brushes.White);
             Sounds.PlayBackGround();
-            stars = new Stars(this);
+            //stars = new Stars(this);
         }
 
         private void InitGame()
@@ -279,22 +279,25 @@ namespace Race
             }
             else if (rightpress)
             {
-                //if (!CheckShipHBToCanvasBorder()) return;
                 ship.ShipRight();
             }
             else if (uppress)
             {
-                //if (!CheckShipHBToCanvasBorder()) return;
                 ship.ShipUp();
             }
             else if (downpress)
             {
-                //if (!CheckShipHBToCanvasBorder()) return;
                 ship.ShipDown();
             }
             else if (spacepress)
             {
+                ship.ShipSprite.Visual = (Visual)Application.Current.Resources["seryoja_mouth_open"];
                 ship.ShipFire();
+            }
+
+            if (!spacepress)
+            {
+                ship.ShipSprite.Visual = (Visual)Application.Current.Resources["seryoja_mouth_close"];
             }
 
             if (leftpress && spacepress)
@@ -367,6 +370,8 @@ namespace Race
 
         private void Window_KeyDown(object sender, KeyEventArgs e)
         {
+            
+
             switch (e.Key)
             {
                 case Key.Left:
