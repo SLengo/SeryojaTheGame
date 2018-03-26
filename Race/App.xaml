@@ -13,6 +13,7 @@
         <Image x:Key="falcone" Source="images/UpperHull.png" />
 
         <Image x:Key="seryoja_happy" Source="images/seryoja_happy.png" />
+        <Image x:Key="seryoja_hurt" Source="images/seryoja_hurt.png" />
         <Image x:Key="seryoja_mouth_close" Source="images/seryoja_mouth_close.png" />
         <Image x:Key="seryoja_mouth_open" Source="images/seryoja_mouth_open.png" />
 
@@ -21,5 +22,10 @@
         <Image x:Key="cloud_3" Source="images/cloud_3.png" />
 
         <Image x:Key="r_fire" Source="images/r_fire.png" />
+
+        <Image x:Key="bact_1" Source="images/bact_1.png" />
+        <Image x:Key="bact_2" Source="images/bact_2.png" />
+        <Image x:Key="bact_3" Source="images/bact_3.png" />
+        <Image x:Key="bact_4" Source="images/bact_4.png" />
     </Application.Resources>
 </Application>

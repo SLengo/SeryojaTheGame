@@ -67,6 +67,7 @@
     <Compile Include="HealthBonus.cs" />
     <Compile Include="Obstacle.cs" />
     <Compile Include="Sounds.cs" />
+    <Compile Include="Clouds.cs" />
     <Compile Include="Stars.cs" />
     <Compile Include="StarShip.cs" />
     <Page Include="Console.xaml">
@@ -130,9 +131,6 @@
     <Resource Include="images\hp_heart.gif" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="images\redsparkle.gif" />
-  </ItemGroup>
-  <ItemGroup>
     <Resource Include="images\health_bonus.png" />
     <Resource Include="images\laser_bonus.png" />
   </ItemGroup>
@@ -145,6 +143,12 @@
     <Resource Include="images\cloud_2.png" />
     <Resource Include="images\cloud_3.png" />
     <Resource Include="images\r_fire.png" />
+    <Resource Include="images\bact_1.png" />
+    <Resource Include="images\bact_2.png" />
+    <Resource Include="images\bact_3.png" />
+    <Resource Include="images\bact_4.png" />
+    <Resource Include="images\ammo_conuter.gif" />
+    <Resource Include="images\seryoja_hurt.png" />
     <Content Include="sounds\background_music.wav">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

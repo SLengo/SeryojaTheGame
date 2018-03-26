@@ -107,6 +107,50 @@ namespace Race
                         }
                         break;
                     }
+                case "givescore":
+                    {
+                        if ((Application.Current.MainWindow as MainWindow).ship != null)
+                        {
+                            int score = 0;
+                            Int32.TryParse(param, out score);
+                            (Application.Current.MainWindow as MainWindow).ship.ShipScore =
+                                score == 0 ? 250 : score;
+                        }
+                        else
+                        {
+                            WriteToConsole("Game ist started!", Brushes.Red);
+                        }
+                        break;
+                    }
+                case "gotospace":
+                    {
+                        if ((Application.Current.MainWindow as MainWindow).ship != null)
+                        {
+                            AnimationsRace.AnimationGoToSpace();
+                        }
+                        else
+                        {
+                            WriteToConsole("Game ist started!", Brushes.Red);
+                        }
+                        break;
+                    }
+                case "setgametime":
+                    {
+                        if ((Application.Current.MainWindow as MainWindow).ship != null)
+                        {
+                            int time = 0;
+                            Int32.TryParse(param, out time);
+                            if(time != 0)
+                            {
+                                (Application.Current.MainWindow as MainWindow).game_time_sec = time;
+                            }
+                        }
+                        else
+                        {
+                            WriteToConsole("Game ist started!", Brushes.Red);
+                        }
+                        break;
+                    }
                 case "quit":
                     {
                         Application.Current.Shutdown();

@@ -27,6 +27,9 @@ namespace Race
         DispatcherTimer CollisionTimer;
         DispatcherTimer KeyTrackTimer;
         DispatcherTimer BonusGeneratorTimer;
+
+        DispatcherTimer StoryBoardTimer;
+
         BetterRandom RandForSomethings;
 
         int obst_cout_increasing_for_up_difficulty = 5; // 5 - start difficulty
@@ -35,6 +38,7 @@ namespace Race
         int prev_ship_score = 0;
 
         public StarShip ship;
+        public Clouds clouds;
         public Stars stars;
 
         public List<Obstacle> CurrentObsts = null;
@@ -45,6 +49,12 @@ namespace Race
         bool uppress = false;
         bool downpress = false;
         bool spacepress = false;
+        bool ser_hurt = false;
+
+        public int game_time_sec = 0;
+
+        //story board flags
+        bool gotospace = false;
 
         public MainWindow()
         {
@@ -69,13 +79,17 @@ namespace Race
             CollisionTimer = new DispatcherTimer();
             CollisionTimer.Interval = TimeSpan.FromMilliseconds(8);
             CollisionTimer.Tick += new EventHandler(CollisionTimerTimerTick);
+
+            StoryBoardTimer = new DispatcherTimer();
+            StoryBoardTimer.Interval = TimeSpan.FromMilliseconds(1000);
+            StoryBoardTimer.Tick += new EventHandler(StoryBoardTimerTimerTick);
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             ConsoleMethod.WriteToConsole("Game window loaded", Brushes.White);
             Sounds.PlayBackGround();
-            stars = new Stars(this);
+            clouds = new Clouds(this);
         }
 
         private void InitGame()
@@ -94,14 +108,12 @@ namespace Race
             ship = null;
             ship = new StarShip(this);
             this.DataContext = ship;
+            StoryBoardTimer.Start();
             BonusGeneratorTimer.Start();
             ObstsGeneratorTimer.Start();
             KeyTrackTimer.Start();
             CollisionTimer.Start();
         }
-
-
-
         private void GameOver()
         {
             Sounds.StopBackGround();
@@ -120,6 +132,21 @@ namespace Race
             CurrentObsts.Clear();
             Sounds.GameOverSoundPlay();
             AnimationsRace.AnimationGameOver();
+        }
+
+
+        private void StoryBoardTimerTimerTick(object sender, EventArgs e)
+        {
+            game_time_sec++;
+            if (game_time_sec >= 60 && !gotospace)
+            {
+                AnimationsRace.AnimationGoToSpace();
+                AnimationsRace.AnimationRemoveClouds(clouds);
+                if(stars == null)
+                    stars = new Stars(this);
+                clouds.StarTimer.Stop();
+                gotospace = true;
+            }
         }
 
         private void ObstsGeneratorTimerTick(object sender, EventArgs e)
@@ -168,6 +195,8 @@ namespace Race
             {
                 if (ship.ShipHitBox.IntersectsWith(CurrentObsts[i].GetHitBoxObst()))
                 {
+                    ser_hurt = true;
+                    ship.ShipSprite.Visual = (Visual)Application.Current.Resources["seryoja_hurt"];
                     ConsoleMethod.WriteToConsole("Obst number " + i + " hitted!", Brushes.White);
                     ship.ShipHp = ship.ShipHp - CurrentObsts[i].ObstDamage <= 0 ?
                         0 : (int)(ship.ShipHp - CurrentObsts[i].ObstDamage);
@@ -208,6 +237,8 @@ namespace Race
                     CurrentBonuses[i].Hitted = true;
                     if (CurrentBonuses[i] is AmmoBonus)
                     {
+                        ser_hurt = true;
+                        ship.ShipSprite.Visual = (Visual)Application.Current.Resources["seryoja_happy"];
                         ConsoleMethod.WriteToConsole("Ammo Bonus obtained!", Brushes.White);
                         ship.ShipAmmo += (CurrentBonuses[i] as AmmoBonus).ammo_count;
                         Sounds.LaserBonusSoundPlay();
@@ -217,6 +248,8 @@ namespace Race
                         ConsoleMethod.WriteToConsole("HP Bonus obtained!", Brushes.White);
                         if (ship.ShipHp < 100)
                         {
+                            ser_hurt = true;
+                            ship.ShipSprite.Visual = (Visual)Application.Current.Resources["seryoja_happy"];
                             ship.ShipHp = ship.ShipHp + (CurrentBonuses[i] as HealthBonus).health_count >= 100 ?
                                 100 : ship.ShipHp + (CurrentBonuses[i] as HealthBonus).health_count;
                             Sounds.HpBonusSoundPlay();
@@ -273,29 +306,37 @@ namespace Race
         {
             if (!CheckShipHBToCanvasBorder()) return;
 
+            if(!ser_hurt)
+                ship.ShipSprite.Visual = (Visual)Application.Current.Resources["seryoja_mouth_close"];
+
             if (leftpress)
             {
+                ser_hurt = false;
                 ship.ShipLeft();
             }
             else if (rightpress)
             {
+                ser_hurt = false;
                 ship.ShipRight();
             }
             else if (uppress)
             {
+                ser_hurt = false;
                 ship.ShipUp();
             }
             else if (downpress)
             {
+                ser_hurt = false;
                 ship.ShipDown();
             }
             else if (spacepress)
             {
                 ship.ShipSprite.Visual = (Visual)Application.Current.Resources["seryoja_mouth_open"];
+                ser_hurt = false;
                 ship.ShipFire();
             }
 
-            if (!spacepress)
+            if (!spacepress && !ser_hurt)
             {
                 ship.ShipSprite.Visual = (Visual)Application.Current.Resources["seryoja_mouth_close"];
             }

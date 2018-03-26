@@ -37,13 +37,14 @@ namespace Race
             ObstToCanvas = new Rectangle();
             VisualBrush vb_for_background = new VisualBrush();
             vb_for_background.Stretch = Stretch.Fill;
-            vb_for_background.Visual = (Visual)Application.Current.Resources["meteor"];
+            int image_num = RandForObst.Between(1,4);
+            vb_for_background.Visual = (Visual)Application.Current.Resources["bact_" + image_num];
             ObstToCanvas.Fill = vb_for_background;
-            ObstToCanvas.Width = RandForObst.Between(20, 50);
+            ObstToCanvas.Width = RandForObst.Between(30, 60);
             ObstToCanvas.Name = "obst";
-            ObstToCanvas.Height = RandForObst.Between(20, 50);
+            ObstToCanvas.Height = RandForObst.Between(30, 60);
             VisualBrush vb = new VisualBrush();
-            vb.Visual = (Visual)Application.Current.Resources["obstmask" + Convert.ToString( RandForObst.Between(1, 3) )];
+            vb.Visual = (Visual)Application.Current.Resources["bact_" + image_num];
             ObstToCanvas.OpacityMask = vb;
             ObstToCanvas.Margin = new Thickness(
                 RandForObst.Between(0, (int)(_mainWindow.MainCanvas.ActualWidth - ObstToCanvas.Width)),

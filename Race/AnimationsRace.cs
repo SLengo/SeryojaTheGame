@@ -32,7 +32,24 @@ namespace Race
             bonus.bonus_rectangle.BeginAnimation(Ellipse.MarginProperty, ta_bonus);
         }
 
-        public static void AnimationStars(List<Rectangle> stars)
+        public static void AnimationStars(List<Ellipse> stars)
+        {
+            for (int i = 0; i < stars.Count; i++)
+            {
+                ThicknessAnimation ta_stars = new ThicknessAnimation();
+                ta_stars.From = stars[i].Margin;
+                double stars_to = stars[i].Margin.Top < 0 ? stars[i].Margin.Top * 2 + Application.Current.MainWindow.ActualHeight + stars[i].Width :
+                    Application.Current.MainWindow.ActualHeight - stars[i].Margin.Top + stars[i].Width;
+                ta_stars.To = new Thickness(stars[i].Margin.Left, stars[i].Margin.Top + stars_to, stars[i].Margin.Right, stars[i].Margin.Bottom);
+                ta_stars.FillBehavior = FillBehavior.HoldEnd;
+                ta_stars.Duration = TimeSpan.FromSeconds(Math.Abs(stars_to) / 150);
+                Ellipse curr_ell = stars[i];
+                ta_stars.Completed += (s, _) => AnimationStarsCompleted(curr_ell);
+                stars[i].BeginAnimation(Ellipse.MarginProperty, ta_stars);
+            }
+        }
+
+        public static void AnimationClouds(List<Rectangle> stars)
         {
             BetterRandom rand = new BetterRandom();
             for (int i = 0; i < stars.Count; i++)
@@ -45,8 +62,20 @@ namespace Race
                 ta_stars.FillBehavior = FillBehavior.HoldEnd;
                 ta_stars.Duration = TimeSpan.FromSeconds(rand.Between(20,30));
                 Rectangle curr_ell = stars[i];
-                ta_stars.Completed += (s, _) => AnimationStarsCompleted(curr_ell);
+                ta_stars.Completed += (s, _) => AnimationCloudCompleted(curr_ell);
                 stars[i].BeginAnimation(Ellipse.MarginProperty, ta_stars);
+            }
+        }
+
+        public static void AnimationRemoveClouds(Clouds cloud)
+        {
+            DoubleAnimation da_piece = new DoubleAnimation();
+            da_piece.From = 1; da_piece.To = 0;
+            da_piece.Duration = TimeSpan.FromSeconds(1);
+            da_piece.FillBehavior = FillBehavior.HoldEnd;
+            foreach (Rectangle item in cloud.AllStars)
+            {
+                item.BeginAnimation(Rectangle.OpacityProperty, da_piece);
             }
         }
 
@@ -90,13 +119,14 @@ namespace Race
                 Rectangle piece = new Rectangle();
                 VisualBrush vb_for_background = new VisualBrush();
                 vb_for_background.Stretch = Stretch.Fill;
-                vb_for_background.Visual = (Visual)Application.Current.Resources["meteor"];
+                int image_num = RandForAnimaObst.Between(1, 4);
+                vb_for_background.Visual = (Visual)Application.Current.Resources["bact_" + image_num];
                 piece.Fill = vb_for_background;
                 piece.Width = RandForAnimaObst.Between((int)(obst.ObstToCanvas.Width * 0.3), (int)(obst.ObstToCanvas.Width * 0.4));
                 piece.Name = "piece";
                 piece.Height = RandForAnimaObst.Between((int)(obst.ObstToCanvas.Height * 0.3), (int)(obst.ObstToCanvas.Height * 0.4));
                 VisualBrush vb = new VisualBrush();
-                vb.Visual = (Visual)Application.Current.Resources["obstmask" + Convert.ToString(RandForAnimaObst.Between(1, 3))];
+                vb.Visual = (Visual)Application.Current.Resources["bact_" + image_num];
                 piece.OpacityMask = vb;
                 piece.Margin = new Thickness(
                     obst.ObstToCanvas.Margin.Left + obst.ObstToCanvas.Width / 2,
@@ -140,7 +170,7 @@ namespace Race
                 Ellipse piece = new Ellipse();
                 piece.Fill = RandForAnimaObst.Between(1, 2) == 1 ? Brushes.Red : Brushes.Yellow;
                 piece.Width = ship.shipRectangle.Width * 0.05;
-                piece.Name = "damage";
+                piece.Name = i == count_of_pieces - 1 ? "last_damage" : "damage";
                 piece.Height = ship.shipRectangle.Height * 0.04;
                 
                 piece.Margin = new Thickness(
@@ -220,6 +250,16 @@ namespace Race
                 }
             }
         }
+        
+        public static void AnimationGoToSpace()
+        {
+            SolidColorBrush rootElementBrush = (Application.Current.MainWindow as MainWindow).Resources["CanvasBrush"] as SolidColorBrush;
+
+            ColorAnimation da_c = new ColorAnimation();
+            da_c.To = Colors.Black;
+            da_c.Duration = TimeSpan.FromSeconds(5);
+            rootElementBrush.BeginAnimation(SolidColorBrush.ColorProperty, da_c);
+        }
 
         public static void AnimationGameOver()
         {
@@ -265,11 +305,21 @@ namespace Race
             (Application.Current.MainWindow as MainWindow).RemoveElementAfterAnimation(element);
         }
 
+        private static void AnimationCloudCompleted(UIElement element)
+        {
+            try
+            {
+                (Application.Current.MainWindow as MainWindow).clouds.AllStars.Remove(element as Rectangle);
+                (Application.Current.MainWindow as MainWindow).RemoveElementAfterAnimation(element);
+            }
+            catch { }
+        }
+
         private static void AnimationStarsCompleted(UIElement element)
         {
             try
             {
-                (Application.Current.MainWindow as MainWindow).stars.AllStars.Remove(element as Rectangle);
+                (Application.Current.MainWindow as MainWindow).stars.AllStars.Remove(element as Ellipse);
                 (Application.Current.MainWindow as MainWindow).RemoveElementAfterAnimation(element);
             }
             catch { }

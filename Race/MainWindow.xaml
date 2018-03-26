@@ -10,6 +10,8 @@
         WindowStartupLocation="CenterScreen" Name="StarRaceWindow"
         WindowStyle="ToolWindow" KeyDown="Window_KeyDown" KeyUp="Window_KeyUp">
     <Window.Resources>
+        <SolidColorBrush Color="AliceBlue" x:Key="CanvasBrush"  />
+        
         <local:DataConvertors x:Key="myDateConverter" />
         <StackPanel x:Key="GameOverPanel" Orientation="Vertical" HorizontalAlignment="Center"
                     VerticalAlignment="Center" Height="400"
@@ -44,7 +46,7 @@
                                Text="{Binding Path=ShipHp, UpdateSourceTrigger=PropertyChanged}" FontSize="35" />
                 </StackPanel>
                 <StackPanel Margin="25,0,0,0" Orientation="Horizontal">
-                    <Image Height="50" gif:ImageBehavior.AnimatedSource="images/redsparkle.gif" />
+                    <Image Height="50" gif:ImageBehavior.AnimatedSource="images/ammo_conuter.gif" />
                     <TextBlock Name="AmmoValue" Foreground="White" FontFamily="Impact"
                                Text="{Binding Path=ShipAmmo, UpdateSourceTrigger=PropertyChanged}" FontSize="35" />
                 </StackPanel>
@@ -59,7 +61,7 @@
             </StackPanel>
         </Border>
 
-        <Canvas Grid.Row="1" Name="MainCanvas" Background="AliceBlue" x:FieldModifier="public">
+        <Canvas Grid.Row="1" Name="MainCanvas" Background="{StaticResource CanvasBrush}" x:FieldModifier="public">
         </Canvas>
         
         <StackPanel Grid.Row="1" Name="Menu" HorizontalAlignment="Center" VerticalAlignment="Center" Orientation="Vertical">
