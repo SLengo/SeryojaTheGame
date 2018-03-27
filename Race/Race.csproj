@@ -64,6 +64,9 @@
     </Compile>
     <Compile Include="ConsoleMethod.cs" />
     <Compile Include="DataConvertors.cs" />
+    <Compile Include="HatSelect.xaml.cs">
+      <DependentUpon>HatSelect.xaml</DependentUpon>
+    </Compile>
     <Compile Include="HealthBonus.cs" />
     <Compile Include="Obstacle.cs" />
     <Compile Include="Sounds.cs" />
@@ -71,6 +74,10 @@
     <Compile Include="Stars.cs" />
     <Compile Include="StarShip.cs" />
     <Page Include="Console.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="HatSelect.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -149,6 +156,14 @@
     <Resource Include="images\bact_4.png" />
     <Resource Include="images\ammo_conuter.gif" />
     <Resource Include="images\seryoja_hurt.png" />
+    <Resource Include="hats\none.png" />
+    <Resource Include="hats\hat_1.png" />
+    <Resource Include="hats\hat_2.png" />
+    <Resource Include="hats\hat_3.png" />
+    <Resource Include="hats\hat_4.png" />
+    <Resource Include="hats\hat_5.png" />
+    <Resource Include="hats\hat_6.png" />
+    <Resource Include="hats\hat_7.png" />
     <Content Include="sounds\background_music.wav">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

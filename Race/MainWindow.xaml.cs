@@ -53,6 +53,8 @@ namespace Race
 
         public int game_time_sec = 0;
 
+        public string selected_hat = "hat_0";
+
         //story board flags
         bool gotospace = false;
 
@@ -88,7 +90,7 @@ namespace Race
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             ConsoleMethod.WriteToConsole("Game window loaded", Brushes.White);
-            Sounds.PlayBackGround();
+            //Sounds.PlayBackGround();
             clouds = new Clouds(this);
         }
 
@@ -102,11 +104,12 @@ namespace Race
                     break;
                 }
             }
-            if (ship != null) Sounds.PlayBackGround();
+           // if (ship != null) Sounds.PlayBackGround();
             Sounds.GameOverSoundStop();
             this.DataContext = null;
             ship = null;
             ship = new StarShip(this);
+            ship.HatSprite.Visual = (Visual)Application.Current.Resources[selected_hat];
             this.DataContext = ship;
             StoryBoardTimer.Start();
             BonusGeneratorTimer.Start();
@@ -190,6 +193,8 @@ namespace Race
 
         private void CollisionTimerTimerTick(object sender, EventArgs e)
         {
+            BetterRandom random_for_some = new BetterRandom();
+
             // check collision obsts and ship
             for (int i = 0; i < CurrentObsts.Count; i++)
             {
@@ -201,7 +206,9 @@ namespace Race
                     ship.ShipHp = ship.ShipHp - CurrentObsts[i].ObstDamage <= 0 ?
                         0 : (int)(ship.ShipHp - CurrentObsts[i].ObstDamage);
                     AnimationsRace.AnimationShipDamage(ship);
-                    Sounds.ShipDamageSoundPlay();
+
+                    Sounds.PlaySoundOnce("hurt_"+ random_for_some.Between(1, 2) +".wav");
+                    
                     if(ship.ShipHp == 0)
                     {
                         GameOver();
@@ -218,9 +225,9 @@ namespace Race
                         ship.GetHitBoxFire(ship.CurrentAmmos[i])) &&
                         !CurrentObsts[j].Hitted)
                     {
+                        CurrentObsts[j].Hitted = true;
                         ship.ShipScore += 10;
                         ConsoleMethod.WriteToConsole("Obst number " + j + " fired by bullet number "+ i + "!", Brushes.White);
-                        CurrentObsts[j].Hitted = true;
                         CurrentObsts[j].ObstacleFiredAnimation();
                         RemoveElementAfterAnimation(CurrentObsts[j].ObstToCanvas);
                         CurrentObsts.Remove(CurrentObsts[j]);
@@ -241,7 +248,7 @@ namespace Race
                         ship.ShipSprite.Visual = (Visual)Application.Current.Resources["seryoja_happy"];
                         ConsoleMethod.WriteToConsole("Ammo Bonus obtained!", Brushes.White);
                         ship.ShipAmmo += (CurrentBonuses[i] as AmmoBonus).ammo_count;
-                        Sounds.LaserBonusSoundPlay();
+                        Sounds.PlaySoundOnce("meh_" + random_for_some.Between(1, 2) + ".wav");
                     }
                     else if (CurrentBonuses[i] is HealthBonus)
                     {
@@ -252,7 +259,7 @@ namespace Race
                             ship.ShipSprite.Visual = (Visual)Application.Current.Resources["seryoja_happy"];
                             ship.ShipHp = ship.ShipHp + (CurrentBonuses[i] as HealthBonus).health_count >= 100 ?
                                 100 : ship.ShipHp + (CurrentBonuses[i] as HealthBonus).health_count;
-                            Sounds.HpBonusSoundPlay();
+                            Sounds.PlaySoundOnce("meh_" + random_for_some.Between(1, 2) + ".wav");
                         }
                         else
                             continue;
@@ -439,7 +446,7 @@ namespace Race
                     {
                         if (ship.ShipAmmo > 0)
                         {
-                            Sounds.LaserShootSoundPlay();
+                            Sounds.PlaySoundOnce("laser_shoot.wav");
                         }
                         else
                         {
@@ -516,5 +523,10 @@ namespace Race
             App.Current.Shutdown();
         }
 
+        private void Customize_Click(object sender, RoutedEventArgs e)
+        {
+            HatSelect hatSelect = new HatSelect();
+            hatSelect.ShowDialog();
+        }
     }
 }

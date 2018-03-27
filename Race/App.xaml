@@ -15,6 +15,7 @@
         <Image x:Key="seryoja_happy" Source="images/seryoja_happy.png" />
         <Image x:Key="seryoja_hurt" Source="images/seryoja_hurt.png" />
         <Image x:Key="seryoja_mouth_close" Source="images/seryoja_mouth_close.png" />
+        <BitmapImage x:Key="seryoja_mouth_close_bitmap" UriSource="images/seryoja_mouth_close.png" />
         <Image x:Key="seryoja_mouth_open" Source="images/seryoja_mouth_open.png" />
 
         <Image x:Key="cloud_1" Source="images/cloud_1.png" />
@@ -27,5 +28,26 @@
         <Image x:Key="bact_2" Source="images/bact_2.png" />
         <Image x:Key="bact_3" Source="images/bact_3.png" />
         <Image x:Key="bact_4" Source="images/bact_4.png" />
+        
+        <!-- hats -->
+        <Image x:Key="hat_0" Source="hats/none.png" />
+        <Image x:Key="hat_1" Source="hats/hat_1.png" />
+        <Image x:Key="hat_2" Source="hats/hat_2.png" />
+        <Image x:Key="hat_3" Source="hats/hat_3.png" />
+        <Image x:Key="hat_4" Source="hats/hat_4.png" />
+        <Image x:Key="hat_5" Source="hats/hat_5.png" />
+        <Image x:Key="hat_6" Source="hats/hat_6.png" />
+        <Image x:Key="hat_7" Source="hats/hat_7.png" />
+
+        <!-- bitmaps hats -->
+        <BitmapImage x:Key="btm_hat_0" UriSource="hats/none.png" />
+        <BitmapImage x:Key="btm_hat_1" UriSource="hats/hat_1.png" />
+        <BitmapImage x:Key="btm_hat_2" UriSource="hats/hat_2.png" />
+        <BitmapImage x:Key="btm_hat_3" UriSource="hats/hat_3.png" />
+        <BitmapImage x:Key="btm_hat_4" UriSource="hats/hat_4.png" />
+        <BitmapImage x:Key="btm_hat_5" UriSource="hats/hat_5.png" />
+        <BitmapImage x:Key="btm_hat_6" UriSource="hats/hat_6.png" />
+        <BitmapImage x:Key="btm_hat_7" UriSource="hats/hat_7.png" />
+
     </Application.Resources>
 </Application>

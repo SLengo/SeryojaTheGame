@@ -66,6 +66,8 @@
         
         <StackPanel Grid.Row="1" Name="Menu" HorizontalAlignment="Center" VerticalAlignment="Center" Orientation="Vertical">
             <Button Name="Start" Click="Start_Click" Content="Start" Width="300" Margin="5"/>
+            <Button Name="Customize" Click="Customize_Click" FontSize="20" 
+                    Content="КАСТОМИЗАЦИЯ СЕРЁЖИ!1!" Width="300" Height="50" Margin="5"/>
             <Button Name="Quit" Click="Quit_Click" Content="Quit" Width="300" Margin="5"/>
         </StackPanel>
     </Grid>

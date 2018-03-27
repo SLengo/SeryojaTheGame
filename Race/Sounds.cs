@@ -42,6 +42,14 @@ namespace Race
         public static MediaPlayer ShipDestroyMediaPlayer;
         public static MediaPlayer EmpLaserMediaPlayer;
 
+        public static void PlaySoundOnce(string filename)
+        {
+            ShootMediaPlayer = new MediaPlayer();
+            ShootMediaPlayer.Open(new Uri(AppDomain.CurrentDomain.BaseDirectory + "sounds/" + filename));
+            ShootMediaPlayer.Volume = 100;
+            ShootMediaPlayer.Play();
+        }
+
         public static void PlayBackGround()
         {
             if (BackGroundMediaPlayer != null)
