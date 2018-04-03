@@ -59,6 +59,7 @@
     </ApplicationDefinition>
     <Compile Include="AmmoBonus.cs" />
     <Compile Include="Bonus.cs" />
+    <Compile Include="Boss.cs" />
     <Compile Include="Console.xaml.cs">
       <DependentUpon>Console.xaml</DependentUpon>
     </Compile>
@@ -164,6 +165,10 @@
     <Resource Include="hats\hat_5.png" />
     <Resource Include="hats\hat_6.png" />
     <Resource Include="hats\hat_7.png" />
+    <Resource Include="images\boss_mouth_open.png" />
+    <Resource Include="images\boss_mouth_open_angry.png" />
+    <Resource Include="images\boss_regular.png" />
+    <Resource Include="images\boss_regular_angry.png" />
     <Content Include="sounds\background_music.wav" />
     <Content Include="sounds\emp_laser.wav">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

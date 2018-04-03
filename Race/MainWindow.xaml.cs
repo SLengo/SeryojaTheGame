@@ -41,6 +41,8 @@ namespace Race
         public Clouds clouds;
         public Stars stars;
 
+        public Boss boss;
+
         public List<Obstacle> CurrentObsts = null;
         public List<Bonus> CurrentBonuses = null;
 

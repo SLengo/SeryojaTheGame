@@ -151,6 +151,36 @@ namespace Race
                         }
                         break;
                     }
+                case "setboss":
+                    {
+                        if ((Application.Current.MainWindow as MainWindow).ship != null)
+                        {
+                            if ((Application.Current.MainWindow as MainWindow).boss == null)
+                            {
+                                (Application.Current.MainWindow as MainWindow).boss = new Boss((Application.Current.MainWindow as MainWindow));
+                            }
+                        }
+                        else
+                        {
+                            WriteToConsole("Game ist started!", Brushes.Red);
+                        }
+                        break;
+                    }
+                case "bossfire":
+                    {
+                        if ((Application.Current.MainWindow as MainWindow).ship != null)
+                        {
+                            if ((Application.Current.MainWindow as MainWindow).boss != null)
+                            {
+                                (Application.Current.MainWindow as MainWindow).boss.BossFire();
+                            }
+                        }
+                        else
+                        {
+                            WriteToConsole("Game ist started!", Brushes.Red);
+                        }
+                        break;
+                    }
                 case "quit":
                     {
                         Application.Current.Shutdown();

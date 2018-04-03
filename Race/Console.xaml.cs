@@ -37,6 +37,7 @@ namespace Race
                 string command = command_line.Length > 0 ? command_line[0] : "";
                 string param = command_line.Length > 1 ? command_line[1] : "";
                 ConsoleMethod.RunConsoleCommand(command, param);
+                MainInput.Text = "";
             }
         }
         private void MainInput_ch(object sender, EventArgs e)

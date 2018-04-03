@@ -49,5 +49,11 @@
         <BitmapImage x:Key="btm_hat_6" UriSource="hats/hat_6.png" />
         <BitmapImage x:Key="btm_hat_7" UriSource="hats/hat_7.png" />
 
+        <!-- boss images -->
+        <Image x:Key="boss_regular" Source="images/boss_regular.png" />
+        <Image x:Key="boss_regular_angry" Source="images/boss_regular_angry.png" />
+        <Image x:Key="boss_mouth_open" Source="images/boss_mouth_open.png" />
+        <Image x:Key="boss_mouth_open_angry" Source="images/boss_mouth_open_angry.png" />
+        
     </Application.Resources>
 </Application>

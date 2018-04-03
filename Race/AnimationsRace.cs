@@ -282,8 +282,93 @@ namespace Race
             ((Application.Current.MainWindow as MainWindow).Resources["GameOverPanel"] as StackPanel).BeginAnimation(Ellipse.MarginProperty, ta);
         }
 
+        #region boss
 
+        public static async void AnimationBossFire(Boss _boss, MainWindow mainWindow)
+        {
+            BetterRandom betterRandom = new BetterRandom();
+            int attack_type = betterRandom.Between(1, 2);
+            //int attack_type = 2;
+            if (attack_type == 1)
+            {
+                for (int i = 0; i < _boss.CurrentBossAmmos.Count; i++)
+                {
+                    ThicknessAnimation ta_piece = new ThicknessAnimation();
+                    ta_piece.From = _boss.CurrentBossAmmos[i].Margin;
+                    ta_piece.Duration = TimeSpan.FromSeconds(2);
+                    ta_piece.To = new Thickness(
+                        _boss.CurrentBossAmmos[i].Margin.Left,
+                        mainWindow.ActualHeight + _boss.CurrentBossAmmos[i].Height,
+                        0, 0
+                        );
+                    if (i == _boss.CurrentBossAmmos.Count - 1)
+                    {
+                        _boss.CurrentBossAmmos[i].Name = "finish";
+                        (Application.Current.MainWindow as MainWindow).boss.BossSprite.Visual = (Visual)Application.Current.Resources["boss_regular_angry"];
+                    }
 
+                    Ellipse ell = _boss.CurrentBossAmmos[i];
+                    ta_piece.Completed += (s, _) => AnimationFireBossCompleted(ell);
+                    _boss.CurrentBossAmmos[i].BeginAnimation(Rectangle.MarginProperty, ta_piece);
+                    await Task.Run(() => System.Threading.Thread.Sleep(100));
+                }
+            }
+            else if (attack_type == 2)
+            {
+                double to_left = 0;
+                int plusOrMinus = 0;
+                double to_top = (Application.Current.MainWindow as MainWindow).ActualHeight;
+                for (int i = 0; i < _boss.CurrentBossAmmos.Count; i++)
+                {
+                    ThicknessAnimation ta_piece = new ThicknessAnimation();
+                    ta_piece.From = _boss.CurrentBossAmmos[i].Margin;
+                    ta_piece.Duration = TimeSpan.FromSeconds(2);
+                    ta_piece.To = new Thickness(
+                        to_left,
+                        to_top + _boss.CurrentBossAmmos[i].Height,
+                        0, 0
+                        );
+                    if (i == _boss.CurrentBossAmmos.Count - 1)
+                    {
+                        _boss.CurrentBossAmmos[i].Name = "finish";
+                        (Application.Current.MainWindow as MainWindow).boss.BossSprite.Visual = (Visual)Application.Current.Resources["boss_regular_angry"];
+                    }
+
+                    Ellipse ell = _boss.CurrentBossAmmos[i];
+                    ta_piece.Completed += (s, _) => AnimationFireBossCompleted(ell);
+                    _boss.CurrentBossAmmos[i].BeginAnimation(Rectangle.MarginProperty, ta_piece);
+                    await Task.Run(() => System.Threading.Thread.Sleep(70));
+                    if (plusOrMinus == 0)
+                    {
+                        if (to_left >= (Application.Current.MainWindow as MainWindow).ActualWidth)
+                        {
+                            plusOrMinus = 2;
+                        }
+                        to_left += 20;
+                    }
+                    else
+                    {
+                        if (to_left <= 0)
+                        {
+                            plusOrMinus = 0;
+                        }
+                        to_left -= 20;
+                    }
+                }
+            }
+        }
+
+        private static void AnimationFireBossCompleted(UIElement element)
+        {
+            if ((element as Ellipse).Name == "finish")
+            {
+                (Application.Current.MainWindow as MainWindow).boss.CurrentBossAmmos.Clear();
+            }
+        }
+
+        #endregion
+
+        // complete events
         private static void AnimationBonusCompleted(UIElement element)
         {
             (Application.Current.MainWindow as MainWindow).RemoveElementAfterAnimation(element);
