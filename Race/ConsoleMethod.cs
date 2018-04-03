@@ -199,6 +199,42 @@ namespace Race
                         }
                         break;
                     }
+                case "boss_walk_a_1":
+                    {
+                        if ((Application.Current.MainWindow as MainWindow).ship != null)
+                        {
+                            if ((Application.Current.MainWindow as MainWindow).boss != null)
+                            {
+                                AnimationsRace.AnimationWalkBossRectangle(
+                                    (Application.Current.MainWindow as MainWindow).boss,
+                                    (Application.Current.MainWindow as MainWindow)
+                                    );
+                            }
+                        }
+                        else
+                        {
+                            WriteToConsole("Game ist started!", Brushes.Red);
+                        }
+                        break;
+                    }
+                case "boss_walk_a_2":
+                    {
+                        if ((Application.Current.MainWindow as MainWindow).ship != null)
+                        {
+                            if ((Application.Current.MainWindow as MainWindow).boss != null)
+                            {
+                                AnimationsRace.AnimationWalkBossCircle(
+                                    (Application.Current.MainWindow as MainWindow).boss,
+                                    (Application.Current.MainWindow as MainWindow)
+                                    );
+                            }
+                        }
+                        else
+                        {
+                            WriteToConsole("Game ist started!", Brushes.Red);
+                        }
+                        break;
+                    }
                 case "quit":
                     {
                         Application.Current.Shutdown();

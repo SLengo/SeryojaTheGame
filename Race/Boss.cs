@@ -22,6 +22,10 @@ namespace Race
     {
         MainWindow _mainWindow;
 
+        public DispatcherTimer BossActionTimer;
+
+        public bool NowMove = false;
+
         double size_of_ammo = 15;
 
         public List<Ellipse> CurrentBossAmmos = null;
@@ -79,6 +83,13 @@ namespace Race
             //BossRectangle.Margin = new Thickness(_mainWindow.MainCanvas.ActualWidth / 2 - BossRectangle.Width / 2,
             //    -BossRectangle.Height,
             //    0, 0);
+
+            BossActionTimer = new DispatcherTimer();
+            BossActionTimer.Interval = TimeSpan.FromMilliseconds(1000);
+            BossActionTimer.Tick += new EventHandler(BossActionTimerTimerTick);
+
+            BossActionTimer.Start();
+
             _mainWindow.MainCanvas.Children.Add(BossRectangle);
         }
 
@@ -112,6 +123,26 @@ namespace Race
                 _mainWindow.MainCanvas.Children.Add(fire);
             }
             AnimationsRace.AnimationBossFire(this, _mainWindow);
+        }
+
+        public void BossActionTimerTimerTick(object sender, EventArgs e)
+        {
+            //AnimationsRace.AnimationBossInit(this, _mainWindow);
+
+            BetterRandom betterRandom = new BetterRandom();
+            int fire_or_not = betterRandom.Between(1,2);
+            int move_or_not = betterRandom.Between(1, 3);
+
+            if (fire_or_not == 1 && !NowMove)
+            {
+                BossFire();
+                AnimationsRace.AnimationBossFire(this, _mainWindow);
+            }
+            if (move_or_not == 1 && !NowMove)
+                AnimationsRace.AnimationWalkBossCircle(this, _mainWindow);
+            else if (move_or_not == 2 && !NowMove)
+                AnimationsRace.AnimationWalkBossRectangle(this, _mainWindow);
+
         }
 
         #region INotifyPropertyChanged requirements
