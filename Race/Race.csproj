@@ -164,9 +164,7 @@
     <Resource Include="hats\hat_5.png" />
     <Resource Include="hats\hat_6.png" />
     <Resource Include="hats\hat_7.png" />
-    <Content Include="sounds\background_music.wav">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
+    <Content Include="sounds\background_music.wav" />
     <Content Include="sounds\emp_laser.wav">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

@@ -4,7 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Race"
-        mc:Ignorable="d" WindowStyle="ToolWindow"
+        mc:Ignorable="d" WindowStyle="ToolWindow" WindowStartupLocation="CenterOwner"
         Title="Выбери шапочку" Height="300" Width="300">
     <Grid Background="AliceBlue">
         <Grid.ColumnDefinitions>

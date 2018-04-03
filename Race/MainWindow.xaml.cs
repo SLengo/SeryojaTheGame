@@ -90,21 +90,24 @@ namespace Race
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             ConsoleMethod.WriteToConsole("Game window loaded", Brushes.White);
-            //Sounds.PlayBackGround();
+            Sounds.PlayBackGround();
             clouds = new Clouds(this);
         }
 
         private void InitGame()
         {
-            foreach (UIElement item in MainCanvas.Children)
+            for (int i = MainCanvas.Children.Count - 1; i >= 0; i--)
             {
-                if(item is StackPanel)
+                if ((MainCanvas.Children[i] is StackPanel) ||
+                    (MainCanvas.Children[i] is Rectangle && (MainCanvas.Children[i] as Rectangle).Name == "hat"))
                 {
-                    MainCanvas.Children.Remove(item);
-                    break;
+                    MainCanvas.Children.Remove(MainCanvas.Children[i]);
                 }
             }
-           // if (ship != null) Sounds.PlayBackGround();
+            if (ship != null)
+            {
+                Sounds.PlayBackGround();
+            }
             Sounds.GameOverSoundStop();
             this.DataContext = null;
             ship = null;
@@ -526,6 +529,7 @@ namespace Race
         private void Customize_Click(object sender, RoutedEventArgs e)
         {
             HatSelect hatSelect = new HatSelect();
+            hatSelect.Owner = this;
             hatSelect.ShowDialog();
         }
     }
