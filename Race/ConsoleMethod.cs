@@ -181,6 +181,24 @@ namespace Race
                         }
                         break;
                     }
+                case "boss_init_a":
+                    {
+                        if ((Application.Current.MainWindow as MainWindow).ship != null)
+                        {
+                            if ((Application.Current.MainWindow as MainWindow).boss != null)
+                            {
+                                AnimationsRace.AnimationBossInit(
+                                    (Application.Current.MainWindow as MainWindow).boss,
+                                    (Application.Current.MainWindow as MainWindow)
+                                    );
+                            }
+                        }
+                        else
+                        {
+                            WriteToConsole("Game ist started!", Brushes.Red);
+                        }
+                        break;
+                    }
                 case "quit":
                     {
                         Application.Current.Shutdown();

@@ -284,6 +284,85 @@ namespace Race
 
         #region boss
 
+        public static async void AnimationBossInit(Boss _boss, MainWindow mainWindow)
+        {
+            ThicknessAnimation ta_piece = new ThicknessAnimation();
+            _boss.BossRectangle.Margin = new Thickness(mainWindow.MainCanvas.ActualWidth + 10,
+                0,
+                0, 0);
+            ta_piece.From = _boss.BossRectangle.Margin;
+            ta_piece.Duration = TimeSpan.FromSeconds(3);
+            ta_piece.To = new Thickness(
+                _boss.BossRectangle.Margin.Left - _boss.BossRectangle.Width / 2,
+                _boss.BossRectangle.Margin.Top,
+                0, 0
+                );
+            _boss.BossRectangle.BeginAnimation(Rectangle.MarginProperty, ta_piece);
+            await Task.Run(() => System.Threading.Thread.Sleep(3010));
+            _boss.BossSprite.Visual = (Visual)Application.Current.Resources["boss_regular_angry"];
+            await Task.Run(() => System.Threading.Thread.Sleep(1000));
+            _boss.BossSprite.Visual = (Visual)Application.Current.Resources["boss_regular"];
+
+            ThicknessAnimation ta_piece1 = new ThicknessAnimation();
+            ta_piece1.From = _boss.BossRectangle.Margin;
+            ta_piece1.Duration = TimeSpan.FromSeconds(3);
+            ta_piece1.To = new Thickness(
+                _boss.BossRectangle.Margin.Left + _boss.BossRectangle.Width / 2,
+                _boss.BossRectangle.Margin.Top,
+                0, 0
+                );
+            _boss.BossRectangle.BeginAnimation(Rectangle.MarginProperty, ta_piece1);
+            await Task.Run(() => System.Threading.Thread.Sleep(3010));
+
+            ThicknessAnimation ta_piece2 = new ThicknessAnimation();
+            Thickness from_t = new Thickness(mainWindow.MainCanvas.ActualWidth  - _boss.BossRectangle.Width - 10,
+                mainWindow.MainCanvas.ActualHeight - 10,
+                0, 0);
+            ta_piece2.From = from_t;
+            ta_piece2.Duration = TimeSpan.FromSeconds(3);
+            ta_piece2.To = new Thickness(
+                from_t.Left,
+                from_t.Top - _boss.BossRectangle.Height / 2,
+                0, 0
+                );
+            _boss.BossRectangle.BeginAnimation(Rectangle.MarginProperty, ta_piece2);
+            await Task.Run(() => System.Threading.Thread.Sleep(3010));
+            _boss.BossSprite.Visual = (Visual)Application.Current.Resources["boss_regular_angry"];
+            await Task.Run(() => System.Threading.Thread.Sleep(1000));
+            _boss.BossSprite.Visual = (Visual)Application.Current.Resources["boss_regular"];
+
+            ThicknessAnimation ta_piece3 = new ThicknessAnimation();
+            
+            ta_piece3.From = _boss.BossRectangle.Margin;
+            ta_piece3.Duration = TimeSpan.FromSeconds(3);
+            ta_piece3.To = new Thickness(
+                from_t.Left,
+                from_t.Top + _boss.BossRectangle.Height / 2,
+                0, 0
+                );
+            _boss.BossRectangle.BeginAnimation(Rectangle.MarginProperty, ta_piece3);
+
+
+
+            ThicknessAnimation ta_piece4 = new ThicknessAnimation();
+            Thickness from_t4 = new Thickness(mainWindow.MainCanvas.ActualWidth / 2 - _boss.BossRectangle.Width / 2,
+                -_boss.BossRectangle.Height,
+                0, 0);
+            ta_piece4.From = from_t4;
+            ta_piece4.Duration = TimeSpan.FromSeconds(3);
+            ta_piece4.To = new Thickness(
+                from_t4.Left,
+                from_t4.Top + _boss.BossRectangle.Height + 20,
+                0, 0
+                );
+            _boss.BossRectangle.BeginAnimation(Rectangle.MarginProperty, ta_piece4);
+            await Task.Run(() => System.Threading.Thread.Sleep(3010));
+            _boss.BossSprite.Visual = (Visual)Application.Current.Resources["boss_mouth_open_angry"];
+            await Task.Run(() => System.Threading.Thread.Sleep(2000));
+            _boss.BossSprite.Visual = (Visual)Application.Current.Resources["boss_regular_angry"];
+
+        }
+
         public static async void AnimationBossFire(Boss _boss, MainWindow mainWindow)
         {
             BetterRandom betterRandom = new BetterRandom();
