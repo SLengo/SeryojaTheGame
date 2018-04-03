@@ -287,166 +287,131 @@ namespace Race
         {
             _boss.NowMove = true;
             BetterRandom betterRandom = new BetterRandom();
-            int repeat_times = betterRandom.Between(1, 3);
+            int repeat_times = 1;
             int speed_time = betterRandom.Between(2, 4);
-
             ThicknessAnimation ta_piece = new ThicknessAnimation();
             ta_piece.From = _boss.BossRectangle.Margin;
             ta_piece.Duration = TimeSpan.FromSeconds(1);
-            ta_piece.To = new Thickness(
+            ta_piece.FillBehavior = FillBehavior.HoldEnd;
+            Thickness thickness_to = new Thickness(
                 20,
                 20,
                 0, 0
                 );
+            ta_piece.To = thickness_to;
             _boss.BossRectangle.BeginAnimation(Rectangle.MarginProperty, ta_piece);
             await Task.Run(() => System.Threading.Thread.Sleep(1010));
 
-            PathGeometry pathGeometryR = new PathGeometry();
-            PathFigure pFigure1 = new PathFigure();
-            LineSegment line1 = new LineSegment();
-            PathFigure pFigure2 = new PathFigure();
-            LineSegment line2 = new LineSegment();
-            PathFigure pFigure3 = new PathFigure();
-            LineSegment line3 = new LineSegment();
-            PathFigure pFigure4 = new PathFigure();
-            LineSegment line4 = new LineSegment();
+            for (int i = 0; i < repeat_times; i++)
+            {
+                ThicknessAnimation from_left_to_right = new ThicknessAnimation();
+                from_left_to_right.From = _boss.BossRectangle.Margin;
+                from_left_to_right.Duration = TimeSpan.FromSeconds(2);
+                from_left_to_right.FillBehavior = FillBehavior.HoldEnd;
+                from_left_to_right.To = new Thickness(mainWindow.MainCanvas.ActualWidth - _boss.BossRectangle.Width - 20,
+                    _boss.BossRectangle.Margin.Top
+                    , 0, 0);
+                _boss.BossRectangle.BeginAnimation(Rectangle.MarginProperty, from_left_to_right);
+                await Task.Run(() => System.Threading.Thread.Sleep(2010));
 
-            pFigure1.StartPoint = new Point(20, 20);
-            line1.Point = new Point(mainWindow.MainCanvas.ActualWidth - _boss.BossRectangle.Width, 20);
-            pFigure1.Segments.Add(line1);
+                ThicknessAnimation from_up_to_down = new ThicknessAnimation();
+                from_up_to_down.From = _boss.BossRectangle.Margin;
+                from_up_to_down.Duration = TimeSpan.FromSeconds(1);
+                from_up_to_down.FillBehavior = FillBehavior.HoldEnd;
+                from_up_to_down.To = new Thickness(_boss.BossRectangle.Margin.Left,
+                    mainWindow.MainCanvas.ActualHeight / 2 - _boss.BossRectangle.Height / 2
+                    , 0, 0);
+                _boss.BossRectangle.BeginAnimation(Rectangle.MarginProperty, from_up_to_down);
+                await Task.Run(() => System.Threading.Thread.Sleep(1010));
 
-            pFigure2.StartPoint = new Point(mainWindow.MainCanvas.ActualWidth - _boss.BossRectangle.Width, 20);
-            line2.Point = new Point(mainWindow.MainCanvas.ActualWidth - _boss.BossRectangle.Width, 
-                mainWindow.MainCanvas.ActualHeight / 2 - _boss.BossRectangle.Height / 2);
-            pFigure2.Segments.Add(line2);
+                ThicknessAnimation from_right_to_left = new ThicknessAnimation();
+                from_right_to_left.From = _boss.BossRectangle.Margin;
+                from_right_to_left.Duration = TimeSpan.FromSeconds(2);
+                from_right_to_left.FillBehavior = FillBehavior.HoldEnd;
+                from_right_to_left.To = new Thickness(20,
+                    _boss.BossRectangle.Margin.Top
+                    , 0, 0);
+                _boss.BossRectangle.BeginAnimation(Rectangle.MarginProperty, from_right_to_left);
+                await Task.Run(() => System.Threading.Thread.Sleep(2010));
 
-            pFigure3.StartPoint = new Point(mainWindow.MainCanvas.ActualWidth - _boss.BossRectangle.Width, 
-                mainWindow.MainCanvas.ActualHeight / 2 - _boss.BossRectangle.Height / 2);
-            line3.Point = new Point(20, mainWindow.MainCanvas.ActualHeight / 2 - _boss.BossRectangle.Height / 2);
-            pFigure3.Segments.Add(line3);
-
-            pFigure4.StartPoint = new Point(20, mainWindow.MainCanvas.ActualHeight / 2 - _boss.BossRectangle.Height / 2);
-            line4.Point = new Point(20, 20);
-            pFigure4.Segments.Add(line4);
-
-            pathGeometryR.Figures.Add(pFigure1);
-            pathGeometryR.Figures.Add(pFigure2);
-            pathGeometryR.Figures.Add(pFigure3);
-            pathGeometryR.Figures.Add(pFigure4);
-            pathGeometryR.Freeze();
-
-            //Path to_c = new Path();
-            //to_c.Data = pathGeometryR;
-            //to_c.Stroke = Brushes.Black;
-            //to_c.StrokeThickness = 1;
-            //mainWindow.MainCanvas.Children.Add(to_c);
-
-
-            DoubleAnimationUsingPath translateXAnimation =
-                new DoubleAnimationUsingPath();
-            translateXAnimation.PathGeometry = pathGeometryR;
-            translateXAnimation.Duration = TimeSpan.FromSeconds(speed_time);
-            translateXAnimation.Source = PathAnimationSource.X;
-            translateXAnimation.RepeatBehavior = new RepeatBehavior(repeat_times);
-            translateXAnimation.FillBehavior = FillBehavior.HoldEnd;
-
-            DoubleAnimationUsingPath translateYAnimation =
-               new DoubleAnimationUsingPath();
-            translateYAnimation.PathGeometry = pathGeometryR;
-            translateYAnimation.Duration = TimeSpan.FromSeconds(speed_time);
-            translateYAnimation.Source = PathAnimationSource.Y;
-            translateYAnimation.RepeatBehavior = new RepeatBehavior(repeat_times);
-            translateYAnimation.FillBehavior = FillBehavior.HoldEnd;
-
-            translateYAnimation.Completed += (s, _) => AnimationMoveBossCompleted(_boss);
-
-            TranslateTransform animatedTranslateTransform =
-                new TranslateTransform();
-            _boss.BossRectangle.RenderTransform = animatedTranslateTransform;
-
-            animatedTranslateTransform.BeginAnimation(TranslateTransform.XProperty, translateXAnimation);
-            animatedTranslateTransform.BeginAnimation(TranslateTransform.YProperty, translateYAnimation);
+                ThicknessAnimation from_down_to_up = new ThicknessAnimation();
+                from_down_to_up.From = _boss.BossRectangle.Margin;
+                from_down_to_up.Duration = TimeSpan.FromSeconds(1);
+                from_down_to_up.FillBehavior = FillBehavior.HoldEnd;
+                from_down_to_up.To = new Thickness(20,
+                    20
+                    , 0, 0);
+                from_down_to_up.Completed += (s, _) => AnimationMoveBossCompleted(_boss, null);
+                _boss.BossRectangle.BeginAnimation(Rectangle.MarginProperty, from_down_to_up);
+            }
         }
         public static async void AnimationWalkBossCircle(Boss _boss, MainWindow mainWindow)
         {
             _boss.NowMove = true;
             BetterRandom betterRandom = new BetterRandom();
-            int repeat_times = betterRandom.Between(1,3);
+            int repeat_times = 1;
             int speed_time = betterRandom.Between(2, 4);
-
             ThicknessAnimation ta_piece = new ThicknessAnimation();
             ta_piece.From = _boss.BossRectangle.Margin;
             ta_piece.Duration = TimeSpan.FromSeconds(1);
-            ta_piece.To = new Thickness(
+            ta_piece.FillBehavior = FillBehavior.HoldEnd;
+            Thickness thickness_to = new Thickness(
                 20,
-                20,
+                mainWindow.MainCanvas.ActualHeight / 2 - _boss.BossRectangle.Height / 2,
                 0, 0
                 );
+            ta_piece.To = thickness_to;
             _boss.BossRectangle.BeginAnimation(Rectangle.MarginProperty, ta_piece);
             await Task.Run(() => System.Threading.Thread.Sleep(1010));
 
-            PathGeometry pathGeometryR = new PathGeometry();
-            PathFigure pFigure1 = new PathFigure();
-            BezierSegment line1 = new BezierSegment();
-            PathFigure pFigure2 = new PathFigure();
-            BezierSegment line2 = new BezierSegment();
-            
+            for (int i = 0; i < repeat_times; i++)
+            {
+                ThicknessAnimation from_left_to_right = new ThicknessAnimation();
+                from_left_to_right.From = _boss.BossRectangle.Margin;
+                from_left_to_right.Duration = TimeSpan.FromSeconds(2);
+                from_left_to_right.FillBehavior = FillBehavior.HoldEnd;
+                from_left_to_right.To = new Thickness(mainWindow.MainCanvas.ActualWidth / 2 - _boss.BossRectangle.Width / 2 - 20,
+                    20
+                    , 0, 0);
+                _boss.BossRectangle.BeginAnimation(Rectangle.MarginProperty, from_left_to_right);
+                await Task.Run(() => System.Threading.Thread.Sleep(2010));
 
-            pFigure1.StartPoint = new Point(mainWindow.MainCanvas.ActualWidth / 2, 20);
-            line1.Point1 = new Point(mainWindow.MainCanvas.ActualWidth,
-                mainWindow.MainCanvas.ActualHeight / 2);
-            line1.Point2 = new Point(mainWindow.MainCanvas.ActualWidth / 2,
-                mainWindow.MainCanvas.ActualHeight / 2 );
-            line1.Point3 = line1.Point2;
-            pFigure1.Segments.Add(line1);
+                ThicknessAnimation from_up_to_down = new ThicknessAnimation();
+                from_up_to_down.From = _boss.BossRectangle.Margin;
+                from_up_to_down.Duration = TimeSpan.FromSeconds(1);
+                from_up_to_down.FillBehavior = FillBehavior.HoldEnd;
+                from_up_to_down.To = new Thickness(mainWindow.MainCanvas.ActualWidth - _boss.BossRectangle.Width - 20,
+                    mainWindow.MainCanvas.ActualHeight / 2 - _boss.BossRectangle.Height / 2
+                    , 0, 0);
+                _boss.BossRectangle.BeginAnimation(Rectangle.MarginProperty, from_up_to_down);
+                await Task.Run(() => System.Threading.Thread.Sleep(1010));
 
-            pFigure2.StartPoint = line1.Point2;
-            line2.Point1 = new Point(-200, -200);
-            line2.Point2 = pFigure1.StartPoint;
-            line2.Point3 = pFigure1.StartPoint;
-            pFigure2.Segments.Add(line2);
-            
+                ThicknessAnimation from_right_to_left = new ThicknessAnimation();
+                from_right_to_left.From = _boss.BossRectangle.Margin;
+                from_right_to_left.Duration = TimeSpan.FromSeconds(2);
+                from_right_to_left.FillBehavior = FillBehavior.HoldEnd;
+                from_right_to_left.To = new Thickness(mainWindow.MainCanvas.ActualWidth / 2 - _boss.BossRectangle.Width / 2,
+                    mainWindow.MainCanvas.ActualHeight / 2
+                    , 0, 0);
+                _boss.BossRectangle.BeginAnimation(Rectangle.MarginProperty, from_right_to_left);
+                await Task.Run(() => System.Threading.Thread.Sleep(2010));
 
-            pathGeometryR.Figures.Add(pFigure1);
-            pathGeometryR.Figures.Add(pFigure2);
-            pathGeometryR.Freeze();
-
-            //Path to_c = new Path();
-            //to_c.Data = pathGeometryR;
-            //to_c.Stroke = Brushes.Black;
-            //to_c.StrokeThickness = 1;
-            //mainWindow.MainCanvas.Children.Add(to_c);
-
-
-            DoubleAnimationUsingPath translateXAnimation =
-                new DoubleAnimationUsingPath();
-            translateXAnimation.PathGeometry = pathGeometryR;
-            translateXAnimation.Duration = TimeSpan.FromSeconds(speed_time);
-            translateXAnimation.Source = PathAnimationSource.X;
-            translateXAnimation.RepeatBehavior = new RepeatBehavior(repeat_times);
-            translateXAnimation.FillBehavior = FillBehavior.HoldEnd;
-
-            DoubleAnimationUsingPath translateYAnimation =
-               new DoubleAnimationUsingPath();
-            translateYAnimation.PathGeometry = pathGeometryR;
-            translateYAnimation.Duration = TimeSpan.FromSeconds(speed_time);
-            translateYAnimation.Source = PathAnimationSource.Y;
-            translateYAnimation.RepeatBehavior = new RepeatBehavior(repeat_times);
-            translateYAnimation.FillBehavior = FillBehavior.HoldEnd;
-
-            translateYAnimation.Completed += (s, _) => AnimationMoveBossCompleted(_boss);
-
-            TranslateTransform animatedTranslateTransform =
-                new TranslateTransform();
-            _boss.BossRectangle.RenderTransform = animatedTranslateTransform;
-
-            animatedTranslateTransform.BeginAnimation(TranslateTransform.XProperty, translateXAnimation);
-            animatedTranslateTransform.BeginAnimation(TranslateTransform.YProperty, translateYAnimation);
+                ThicknessAnimation from_down_to_up = new ThicknessAnimation();
+                from_down_to_up.From = _boss.BossRectangle.Margin;
+                from_down_to_up.Duration = TimeSpan.FromSeconds(1);
+                from_down_to_up.FillBehavior = FillBehavior.HoldEnd;
+                from_down_to_up.To = new Thickness(_boss.BossRectangle.Margin.Left,
+                    20
+                    , 0, 0);
+                from_down_to_up.Completed += (s, _) => AnimationMoveBossCompleted(_boss, null);
+                _boss.BossRectangle.BeginAnimation(Rectangle.MarginProperty, from_down_to_up);
+            }
         }
 
         public static async void AnimationBossInit(Boss _boss, MainWindow mainWindow)
         {
             _boss.NowMove = true;
+            _boss.NowInit = 1;
             ThicknessAnimation ta_piece = new ThicknessAnimation();
             _boss.BossRectangle.Margin = new Thickness(mainWindow.MainCanvas.ActualWidth + 10,
                 0,
@@ -486,6 +451,7 @@ namespace Race
                 from_t.Top - _boss.BossRectangle.Height / 2,
                 0, 0
                 );
+            ta_piece2.FillBehavior = FillBehavior.HoldEnd;
             _boss.BossRectangle.BeginAnimation(Rectangle.MarginProperty, ta_piece2);
             await Task.Run(() => System.Threading.Thread.Sleep(3010));
             _boss.BossSprite.Visual = (Visual)Application.Current.Resources["boss_regular_angry"];
@@ -501,7 +467,7 @@ namespace Race
                 0, 0
                 );
             _boss.BossRectangle.BeginAnimation(Rectangle.MarginProperty, ta_piece3);
-
+            await Task.Run(() => System.Threading.Thread.Sleep(3010));
 
 
             ThicknessAnimation ta_piece4 = new ThicknessAnimation();
@@ -510,49 +476,62 @@ namespace Race
                 0, 0);
             ta_piece4.From = from_t4;
             ta_piece4.Duration = TimeSpan.FromSeconds(3);
-            ta_piece4.To = new Thickness(
+            Thickness thickness_to = new Thickness(
                 from_t4.Left,
                 from_t4.Top + _boss.BossRectangle.Height + 20,
                 0, 0
                 );
-            ta_piece4.Completed += (s, _) => AnimationMoveBossCompleted(_boss);
-            ta_piece4.FillBehavior = FillBehavior.HoldEnd;
+            ta_piece4.To = thickness_to;
+            ta_piece4.Completed += (s, _) => AnimationMoveBossCompleted(_boss, null);
+           // ta_piece4.FillBehavior = FillBehavior.HoldEnd;
             _boss.BossRectangle.BeginAnimation(Rectangle.MarginProperty, ta_piece4);
             await Task.Run(() => System.Threading.Thread.Sleep(3010));
+            BetterRandom betterRandom = new BetterRandom();
+            Sounds.PlaySoundOnce("boss_scream_"+ betterRandom.Between(1,2) +".wav");
             _boss.BossSprite.Visual = (Visual)Application.Current.Resources["boss_mouth_open_angry"];
             await Task.Run(() => System.Threading.Thread.Sleep(2000));
             _boss.BossSprite.Visual = (Visual)Application.Current.Resources["boss_regular_angry"];
 
         }
 
-        public static async void AnimationBossFire(Boss _boss, MainWindow mainWindow)
+        public static async void AnimationBossFire(Boss _boss, MainWindow mainWindow, int count_of_ammos)
         {
-            _boss.NowMove = true;
+            _boss.NowFire = true;
             BetterRandom betterRandom = new BetterRandom();
             int attack_type = betterRandom.Between(1, 2);
             //int attack_type = 2;
             if (attack_type == 1)
             {
-                for (int i = 0; i < _boss.CurrentBossAmmos.Count; i++)
+                for (int i = 0; i < count_of_ammos; i++)
                 {
+                    Ellipse fire = new Ellipse();
+                    fire.Width =  _boss.size_of_ammo;
+                    fire.Height = _boss.size_of_ammo;
+                    fire.Fill = Brushes.Red;
+                    _boss.CurrentBossAmmos.Add(fire);
+                    fire.Margin = new Thickness(_boss.BossRectangle.Margin.Left + _boss.BossRectangle.Width / 2 - 10,
+                        _boss.BossRectangle.Margin.Top + _boss.BossRectangle.Height * 0.7,
+                        0, 0);
+                    mainWindow.MainCanvas.Children.Add(fire);
+
                     ThicknessAnimation ta_piece = new ThicknessAnimation();
-                    ta_piece.From = _boss.CurrentBossAmmos[i].Margin;
+                    ta_piece.From = fire.Margin;
                     ta_piece.Duration = TimeSpan.FromSeconds(2);
                     ta_piece.To = new Thickness(
-                        _boss.CurrentBossAmmos[i].Margin.Left,
-                        mainWindow.ActualHeight + _boss.CurrentBossAmmos[i].Height,
+                        fire.Margin.Left,
+                        mainWindow.ActualHeight + fire.Height,
                         0, 0
                         );
-                    if (i == _boss.CurrentBossAmmos.Count - 1)
+                    if (i == count_of_ammos - 1)
                     {
-                        _boss.CurrentBossAmmos[i].Name = "finish";
+                        fire.Name = "finish";
                         (Application.Current.MainWindow as MainWindow).boss.BossSprite.Visual = (Visual)Application.Current.Resources["boss_regular_angry"];
                     }
 
-                    Ellipse ell = _boss.CurrentBossAmmos[i];
+                    Ellipse ell = fire;
                     ta_piece.Completed += (s, _) => AnimationFireBossCompleted(ell);
-                    _boss.CurrentBossAmmos[i].BeginAnimation(Rectangle.MarginProperty, ta_piece);
-                    await Task.Run(() => System.Threading.Thread.Sleep(100));
+                    fire.BeginAnimation(Rectangle.MarginProperty, ta_piece);
+                    await Task.Run(() => System.Threading.Thread.Sleep(80));
                 }
             }
             else if (attack_type == 2)
@@ -560,25 +539,35 @@ namespace Race
                 double to_left = 0;
                 int plusOrMinus = 0;
                 double to_top = (Application.Current.MainWindow as MainWindow).ActualHeight;
-                for (int i = 0; i < _boss.CurrentBossAmmos.Count; i++)
+                for (int i = 0; i < count_of_ammos; i++)
                 {
+                    Ellipse fire = new Ellipse();
+                    fire.Width = _boss.size_of_ammo;
+                    fire.Height = _boss.size_of_ammo;
+                    fire.Fill = Brushes.Red;
+                    _boss.CurrentBossAmmos.Add(fire);
+                    fire.Margin = new Thickness(_boss.BossRectangle.Margin.Left + _boss.BossRectangle.Width / 2 - 10,
+                        _boss.BossRectangle.Margin.Top + _boss.BossRectangle.Height * 0.7,
+                        0, 0);
+                    mainWindow.MainCanvas.Children.Add(fire);
+
                     ThicknessAnimation ta_piece = new ThicknessAnimation();
-                    ta_piece.From = _boss.CurrentBossAmmos[i].Margin;
+                    ta_piece.From = fire.Margin;
                     ta_piece.Duration = TimeSpan.FromSeconds(2);
                     ta_piece.To = new Thickness(
                         to_left,
-                        to_top + _boss.CurrentBossAmmos[i].Height,
+                        to_top + fire.Height,
                         0, 0
                         );
-                    if (i == _boss.CurrentBossAmmos.Count - 1)
+                    if (i == count_of_ammos - 1)
                     {
-                        _boss.CurrentBossAmmos[i].Name = "finish";
+                        fire.Name = "finish";
                         (Application.Current.MainWindow as MainWindow).boss.BossSprite.Visual = (Visual)Application.Current.Resources["boss_regular_angry"];
                     }
 
-                    Ellipse ell = _boss.CurrentBossAmmos[i];
+                    Ellipse ell = fire;
                     ta_piece.Completed += (s, _) => AnimationFireBossCompleted(ell);
-                    _boss.CurrentBossAmmos[i].BeginAnimation(Rectangle.MarginProperty, ta_piece);
+                    fire.BeginAnimation(Rectangle.MarginProperty, ta_piece);
                     await Task.Run(() => System.Threading.Thread.Sleep(70));
                     if (plusOrMinus == 0)
                     {
@@ -600,16 +589,23 @@ namespace Race
             }
         }
 
-        private static void AnimationMoveBossCompleted(Boss element)
+
+        private static void AnimationMoveBossFillMarginCompleted(Thickness thickness)
+        {
+            //(Application.Current.MainWindow as MainWindow).boss.BossRectangle.Margin = thickness;
+        }
+
+        private static void AnimationMoveBossCompleted(Boss element, TranslateTransform translateTransform)
         {
             element.NowMove = false;
+            element.NowInit = 2;
         }
 
         private static void AnimationFireBossCompleted(UIElement element)
         {
             if ((element as Ellipse).Name == "finish")
             {
-                (Application.Current.MainWindow as MainWindow).boss.NowMove = false;
+                (Application.Current.MainWindow as MainWindow).boss.NowFire = false;
                 (Application.Current.MainWindow as MainWindow).boss.CurrentBossAmmos.Clear();
             }
         }

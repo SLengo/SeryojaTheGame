@@ -59,6 +59,7 @@ namespace Race
 
         //story board flags
         bool gotospace = false;
+        bool bossfight = false;
 
         public MainWindow()
         {
@@ -155,6 +156,13 @@ namespace Race
                 clouds.StarTimer.Stop();
                 gotospace = true;
             }
+            if(game_time_sec >= 180 && !bossfight)
+            {
+                bossfight = true;
+                Sounds.StopBackGround();
+                Sounds.PlayBossBackGround();
+                boss = new Boss(this);
+            }
         }
 
         private void ObstsGeneratorTimerTick(object sender, EventArgs e)
@@ -224,6 +232,7 @@ namespace Race
             // check collision bullets and obsts
             for (int i = 0; i < ship.CurrentAmmos.Count; i++)
             {
+                // bullet on obsts
                 for (int j = 0; j < CurrentObsts.Count; j++)
                 {
                     if (CurrentObsts[j].GetHitBoxObst().IntersectsWith(
@@ -237,6 +246,15 @@ namespace Race
                         RemoveElementAfterAnimation(CurrentObsts[j].ObstToCanvas);
                         CurrentObsts.Remove(CurrentObsts[j]);
                         Sounds.ObstDamageSoundPlay();
+                    }
+                }
+
+                // bullet on boss
+                if(bossfight)
+                {
+                    if(boss.GetBossHitBox().IntersectsWith(ship.GetHitBoxFire(ship.CurrentAmmos[i])))
+                    {
+                        boss.BossHealthPoint -= ship.ShipFireDamage;
                     }
                 }
             }

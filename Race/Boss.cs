@@ -25,8 +25,10 @@ namespace Race
         public DispatcherTimer BossActionTimer;
 
         public bool NowMove = false;
+        public bool NowFire = false;
+        public int NowInit = 0;
 
-        double size_of_ammo = 15;
+        public double size_of_ammo = 15;
 
         public List<Ellipse> CurrentBossAmmos = null;
 
@@ -77,12 +79,26 @@ namespace Race
             BossRectangle.Name = "Boss";
             BossRectangle.Width = 200;
             BossRectangle.Height = 250;
-            BossRectangle.Margin = new Thickness(_mainWindow.MainCanvas.ActualWidth / 2 - BossRectangle.Width / 2,
-               0,
-               0, 0);
             //BossRectangle.Margin = new Thickness(_mainWindow.MainCanvas.ActualWidth / 2 - BossRectangle.Width / 2,
-            //    -BossRectangle.Height,
-            //    0, 0);
+            //   0,
+            //   0, 0);
+            BossRectangle.Margin = new Thickness(_mainWindow.MainCanvas.ActualWidth / 2 - BossRectangle.Width / 2,
+                -BossRectangle.Height,
+                0, 0);
+
+            BossHealthPoint = 10000;
+
+            ProgressBar progressBarHealthBoss = new ProgressBar();
+            progressBarHealthBoss.Minimum = 0;
+            progressBarHealthBoss.Width = mainWindow.MainCanvas.ActualWidth;
+            progressBarHealthBoss.Height = 15;
+            progressBarHealthBoss.Background = Brushes.Red;
+            progressBarHealthBoss.Maximum = BossHealthPoint;
+            Binding bindingValueProgerssBar = new Binding("BossHealthPoint");
+            bindingValueProgerssBar.Source = this;
+            progressBarHealthBoss.Margin = new Thickness(0,0,0,0);
+            BindingOperations.SetBinding(progressBarHealthBoss, ProgressBar.ValueProperty, bindingValueProgerssBar);
+            _mainWindow.MainCanvas.Children.Add(progressBarHealthBoss);
 
             BossActionTimer = new DispatcherTimer();
             BossActionTimer.Interval = TimeSpan.FromMilliseconds(1000);
@@ -109,38 +125,26 @@ namespace Race
             int count_of_ammos = betterRandom.Between(100, 150);
 
             this.BossSprite.Visual = (Visual)Application.Current.Resources["boss_mouth_open_angry"];
-
-            for (int i = 0; i < count_of_ammos; i++)
-            {
-                Ellipse fire = new Ellipse();
-                fire.Width = size_of_ammo;
-                fire.Height = size_of_ammo;
-                fire.Fill = Brushes.Red;
-                CurrentBossAmmos.Add(fire);
-                fire.Margin = new Thickness(BossRectangle.Margin.Left + BossRectangle.Width / 2 - 10,
-                    BossRectangle.Margin.Top + BossRectangle.Height * 0.7,
-                    0,0);
-                _mainWindow.MainCanvas.Children.Add(fire);
-            }
-            AnimationsRace.AnimationBossFire(this, _mainWindow);
+            AnimationsRace.AnimationBossFire(this, _mainWindow, count_of_ammos);
         }
 
         public void BossActionTimerTimerTick(object sender, EventArgs e)
         {
-            //AnimationsRace.AnimationBossInit(this, _mainWindow);
+            if(NowInit == 0)
+                AnimationsRace.AnimationBossInit(this, _mainWindow);
 
             BetterRandom betterRandom = new BetterRandom();
             int fire_or_not = betterRandom.Between(1,2);
             int move_or_not = betterRandom.Between(1, 3);
 
-            if (fire_or_not == 1 && !NowMove)
+            if (fire_or_not == 1 && !NowFire && NowInit == 2)
             {
+                Sounds.PlaySoundOnce("boss_scream_" + betterRandom.Between(1, 2) + ".wav");
                 BossFire();
-                AnimationsRace.AnimationBossFire(this, _mainWindow);
             }
-            if (move_or_not == 1 && !NowMove)
+            if (move_or_not == 1 && !NowMove && NowInit == 2)
                 AnimationsRace.AnimationWalkBossCircle(this, _mainWindow);
-            else if (move_or_not == 2 && !NowMove)
+            else if (move_or_not == 2 && !NowMove && NowInit == 2)
                 AnimationsRace.AnimationWalkBossRectangle(this, _mainWindow);
 
         }

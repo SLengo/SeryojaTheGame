@@ -23,6 +23,7 @@ namespace Race
     public class Sounds
     {
         public static string BackGroundSoundUri = "sounds/background_music.wav";
+        public static string BossBackGroundSoundUri = "sounds/boss_fight.wav";
         public static string ShootLaserSoundUri = "sounds/laser_shoot.wav";
         public static string HpBonusSoundUri = "sounds/hp_bonus.wav";
         public static string LaserBonusSoundUri = "sounds/laser_bonus.wav";
@@ -33,6 +34,7 @@ namespace Race
         public static string EmpLaserSoundUri = "sounds/emp_laser.wav";
 
         public static MediaPlayer BackGroundMediaPlayer;
+        public static MediaPlayer BossFightBackGroundMediaPlayer;
         public static MediaPlayer ShootMediaPlayer;
         public static MediaPlayer HpBonusMediaPlayer;
         public static MediaPlayer LaserBonusMediaPlayer;
@@ -72,6 +74,31 @@ namespace Race
             if (BackGroundMediaPlayer == null) return;
             BackGroundMediaPlayer.Stop();
         }
+
+
+        public static void PlayBossBackGround()
+        {
+            if (BossFightBackGroundMediaPlayer != null)
+            {
+                BossFightBackGroundMediaPlayer.Stop();
+            }
+            BossFightBackGroundMediaPlayer = new MediaPlayer();
+            BossFightBackGroundMediaPlayer.Open(new Uri(AppDomain.CurrentDomain.BaseDirectory + BossBackGroundSoundUri));
+            BossFightBackGroundMediaPlayer.Volume = 50;
+            BossFightBackGroundMediaPlayer.MediaEnded += Media_EndedBossFight;
+            BossFightBackGroundMediaPlayer.Play();
+        }
+        private static void Media_EndedBossFight(object sender, EventArgs e)
+        {
+            BossFightBackGroundMediaPlayer.Position = TimeSpan.Zero;
+            BossFightBackGroundMediaPlayer.Play();
+        }
+        public static void StopBossBackGround()
+        {
+            if (BossFightBackGroundMediaPlayer == null) return;
+            BossFightBackGroundMediaPlayer.Stop();
+        }
+
         public static void LaserShootSoundPlay()
         {
             ShootMediaPlayer = new MediaPlayer();

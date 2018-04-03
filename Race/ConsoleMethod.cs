@@ -53,6 +53,18 @@ namespace Race
                         }
                         break;
                     }
+                case "god":
+                    {
+                        if ((Application.Current.MainWindow as MainWindow).ship != null)
+                        {
+                            (Application.Current.MainWindow as MainWindow).ship.ShipHp = 9999;
+                        }
+                        else
+                        {
+                            WriteToConsole("Game ist started!", Brushes.Red);
+                        }
+                        break;
+                    }
                 case "giveammo":
                     {
                         if ((Application.Current.MainWindow as MainWindow).ship != null)

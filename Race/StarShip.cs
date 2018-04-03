@@ -21,6 +21,18 @@ namespace Race
     public class StarShip : INotifyPropertyChanged
     {
         MainWindow _mainWindow;
+
+        int shipFireDamage;
+        public int ShipFireDamage
+        {
+            get { return shipFireDamage; }
+            set
+            {
+                shipFireDamage = value;
+                OnPropertyChanged("ShipFireDamage");
+            }
+        }
+
         public Rectangle shipRectangle;
         public Rectangle ShipRectangle
         {
@@ -143,7 +155,7 @@ namespace Race
                 0, 0);
             _mainWindow.MainCanvas.Children.Add(HatRectangle);
 
-
+            ShipFireDamage = 5;
 
             ShipHitBox.Width = ShipRectangle.Width * 0.7;
             ShipHitBox.Height = ShipRectangle.Height * 0.7;
