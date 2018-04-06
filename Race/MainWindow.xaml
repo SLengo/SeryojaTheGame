@@ -43,7 +43,7 @@
                 <StackPanel Orientation="Horizontal">
                     <Image Height="50" gif:ImageBehavior.AnimatedSource="images/hp_heart.gif" />
                     <TextBlock Name="HpValue" Foreground="White" Width="70" FontFamily="Impact"
-                               Text="{Binding Path=ShipHp, UpdateSourceTrigger=PropertyChanged}" FontSize="35" />
+                               Text="{Binding Path=ShipHp, Converter={StaticResource HpConvetror}, UpdateSourceTrigger=PropertyChanged}" FontSize="35" />
                 </StackPanel>
                 <StackPanel Margin="25,0,0,0" Orientation="Horizontal">
                     <Image Height="50" gif:ImageBehavior.AnimatedSource="images/ammo_conuter.gif" />

@@ -69,6 +69,7 @@
       <DependentUpon>HatSelect.xaml</DependentUpon>
     </Compile>
     <Compile Include="HealthBonus.cs" />
+    <Compile Include="HpConvetror.cs" />
     <Compile Include="Obstacle.cs" />
     <Compile Include="Sounds.cs" />
     <Compile Include="Clouds.cs" />

@@ -57,6 +57,8 @@ namespace Race
 
         public string selected_hat = "hat_0";
 
+        ProgressBar progressBarHealthBoss;
+
         //story board flags
         bool gotospace = false;
         bool bossfight = false;
@@ -106,6 +108,10 @@ namespace Race
                 {
                     MainCanvas.Children.Remove(MainCanvas.Children[i]);
                 }
+                if(MainCanvas.Children[i] is Rectangle && (MainCanvas.Children[i] as Rectangle).Name == "Boss")
+                {
+                    MainCanvas.Children.Remove(MainCanvas.Children[i]);
+                }
             }
             if (ship != null)
             {
@@ -114,6 +120,7 @@ namespace Race
             Sounds.GameOverSoundStop();
             this.DataContext = null;
             ship = null;
+            boss = null;
             ship = new StarShip(this);
             ship.HatSprite.Visual = (Visual)Application.Current.Resources[selected_hat];
             this.DataContext = ship;
@@ -127,6 +134,7 @@ namespace Race
         {
             Sounds.StopBackGround();
             Sounds.ShipDestroySoundPlay();
+            Sounds.StopBossBackGround();
             AnimationsRace.AnimationShipGameOver(ship);
             RemoveElementAfterAnimation(ship.shipRectangle);
             BonusGeneratorTimer.Stop();
@@ -141,6 +149,25 @@ namespace Race
             CurrentObsts.Clear();
             Sounds.GameOverSoundPlay();
             AnimationsRace.AnimationGameOver();
+        }
+        private void GameWin()
+        {
+            BonusGeneratorTimer.Stop();
+            ObstsGeneratorTimer.Stop();
+            KeyTrackTimer.Stop();
+            CollisionTimer.Stop();
+            foreach (Ellipse item in boss.CurrentBossAmmos)
+            {
+                MainCanvas.Children.Remove(item);
+            }
+            foreach (Obstacle item in CurrentObsts)
+            {
+                item.ObstacleFiredAnimation();
+                RemoveElementAfterAnimation(item.ObstToCanvas);
+            }
+            CurrentObsts.Clear();
+            boss.StopFire = true;
+            AnimationsRace.AnimationBossNoMore(boss);
         }
 
 
@@ -162,6 +189,15 @@ namespace Race
                 Sounds.StopBackGround();
                 Sounds.PlayBossBackGround();
                 boss = new Boss(this);
+
+                progressBarHealthBoss = new ProgressBar();
+                progressBarHealthBoss.Minimum = 0;
+                progressBarHealthBoss.Width = MainCanvas.ActualWidth;
+                progressBarHealthBoss.Height = 15;
+                progressBarHealthBoss.Background = Brushes.Black;
+                progressBarHealthBoss.Maximum = boss.BossHealthPoint;
+                progressBarHealthBoss.Value = boss.BossHealthPoint;
+                MainCanvas.Children.Add(progressBarHealthBoss);
             }
         }
 
@@ -230,7 +266,7 @@ namespace Race
             }
 
             // check collision bullets and obsts
-            for (int i = 0; i < ship.CurrentAmmos.Count; i++)
+            for (int i = ship.CurrentAmmos.Count - 1; i >=0; i--)
             {
                 // bullet on obsts
                 for (int j = 0; j < CurrentObsts.Count; j++)
@@ -254,8 +290,43 @@ namespace Race
                 {
                     if(boss.GetBossHitBox().IntersectsWith(ship.GetHitBoxFire(ship.CurrentAmmos[i])))
                     {
-                        boss.BossHealthPoint -= ship.ShipFireDamage;
+                        if (boss.BossHealthPoint >= 0)
+                        {
+                            MainCanvas.Children.Remove(ship.CurrentAmmos[i]);
+                            boss.BossHealthPoint -= ship.ShipFireDamage;
+                            progressBarHealthBoss.Value = boss.BossHealthPoint;
+                            ConsoleMethod.WriteToConsole("Boss hitted!", Brushes.GreenYellow);
+                        }
+                        else
+                        {
+                            GameWin();
+                        }
                     }
+                }
+            }
+
+            // collision boss fire with seryoja
+            if (bossfight)
+            {
+                for (int i = 0; i < boss.CurrentBossAmmos.Count; i++)
+                {
+                    try
+                    {
+                        Rect BossFireHitBox = new Rect();
+                        BossFireHitBox.Width = boss.CurrentBossAmmos[i].Width;
+                        BossFireHitBox.Height = boss.CurrentBossAmmos[i].Height;
+                        BossFireHitBox.X = boss.CurrentBossAmmos[i].Margin.Left;
+                        BossFireHitBox.Y = boss.CurrentBossAmmos[i].Margin.Top;
+
+                        if (BossFireHitBox.IntersectsWith(ship.ShipHitBox))
+                        {
+                            if (ship.ShipHp >= 0)
+                                ship.ShipHp = ship.ShipHp - boss.BossFireDamage <= 0 ? 0 : ship.ShipHp - boss.BossFireDamage;
+                            else
+                                GameOver();
+                        }
+                    }
+                    catch { }
                 }
             }
 

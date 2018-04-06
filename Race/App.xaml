@@ -4,6 +4,8 @@
              xmlns:local="clr-namespace:Race"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
+        <local:HpConvetror x:Key="HpConvetror" />
+
         <Image x:Key="obstmask1" Source="images/obst1.png" />
         <Image x:Key="obstmask2" Source="images/obst2.png" />
         <Image x:Key="obstmask3" Source="images/obst3.png" />

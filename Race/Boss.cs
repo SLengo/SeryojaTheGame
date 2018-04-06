@@ -26,10 +26,11 @@ namespace Race
 
         public bool NowMove = false;
         public bool NowFire = false;
+        public bool StopFire = false;
         public int NowInit = 0;
 
         public double size_of_ammo = 15;
-
+        public double BossFireDamage { get; set; }
         public List<Ellipse> CurrentBossAmmos = null;
 
         public Rectangle bossRectangle;
@@ -69,8 +70,9 @@ namespace Race
         {
             _mainWindow = mainWindow;
             CurrentBossAmmos = new List<Ellipse>();
-
+            StopFire = false;
             health_point = 300;
+            BossFireDamage = 0.4;
             BossRectangle = new Rectangle();
             VisualBrush vb = new VisualBrush();
             vb.Visual = (Visual)Application.Current.Resources["boss_regular"];
@@ -86,19 +88,8 @@ namespace Race
                 -BossRectangle.Height,
                 0, 0);
 
-            BossHealthPoint = 10000;
-
-            ProgressBar progressBarHealthBoss = new ProgressBar();
-            progressBarHealthBoss.Minimum = 0;
-            progressBarHealthBoss.Width = mainWindow.MainCanvas.ActualWidth;
-            progressBarHealthBoss.Height = 15;
-            progressBarHealthBoss.Background = Brushes.Red;
-            progressBarHealthBoss.Maximum = BossHealthPoint;
-            Binding bindingValueProgerssBar = new Binding("BossHealthPoint");
-            bindingValueProgerssBar.Source = this;
-            progressBarHealthBoss.Margin = new Thickness(0,0,0,0);
-            BindingOperations.SetBinding(progressBarHealthBoss, ProgressBar.ValueProperty, bindingValueProgerssBar);
-            _mainWindow.MainCanvas.Children.Add(progressBarHealthBoss);
+            //BossHealthPoint = 25000;
+            BossHealthPoint = 100;
 
             BossActionTimer = new DispatcherTimer();
             BossActionTimer.Interval = TimeSpan.FromMilliseconds(1000);
@@ -139,6 +130,7 @@ namespace Race
 
             if (fire_or_not == 1 && !NowFire && NowInit == 2)
             {
+                if (StopFire) return;
                 Sounds.PlaySoundOnce("boss_scream_" + betterRandom.Between(1, 2) + ".wav");
                 BossFire();
             }

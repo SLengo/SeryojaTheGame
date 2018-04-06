@@ -93,7 +93,7 @@ namespace Race
             obst.ObstToCanvas.BeginAnimation(Ellipse.MarginProperty, ta_obst);
         }
 
-        public static void AnimationBulletfire(Rectangle fire, Rectangle ShipRectangle, double coord_y)
+        public async static void AnimationBulletfire(Rectangle fire, Rectangle ShipRectangle, double coord_y)
         {
             ThicknessAnimation ta_fire = new ThicknessAnimation();
             ta_fire.From = fire.Margin;
@@ -504,10 +504,12 @@ namespace Race
             {
                 for (int i = 0; i < count_of_ammos; i++)
                 {
+                    if (_boss.StopFire) return;
                     Ellipse fire = new Ellipse();
                     fire.Width =  _boss.size_of_ammo;
                     fire.Height = _boss.size_of_ammo;
                     fire.Fill = Brushes.Red;
+                    fire.Name = "boss_fire";
                     _boss.CurrentBossAmmos.Add(fire);
                     fire.Margin = new Thickness(_boss.BossRectangle.Margin.Left + _boss.BossRectangle.Width / 2 - 10,
                         _boss.BossRectangle.Margin.Top + _boss.BossRectangle.Height * 0.7,
@@ -536,6 +538,7 @@ namespace Race
             }
             else if (attack_type == 2)
             {
+                if (_boss.StopFire) return;
                 double to_left = 0;
                 int plusOrMinus = 0;
                 double to_top = (Application.Current.MainWindow as MainWindow).ActualHeight;
@@ -585,6 +588,80 @@ namespace Race
                         }
                         to_left -= 20;
                     }
+                }
+            }
+        }
+
+        public static async void AnimationBossNoMore(Boss _boss)
+        {
+            BetterRandom betterRandom = new BetterRandom();
+            for (int i = 0; i < 20; i++)
+            {
+                ThicknessAnimation ta_piece = new ThicknessAnimation();
+                ta_piece.From = _boss.BossRectangle.Margin;
+                ta_piece.Duration = TimeSpan.FromMilliseconds(100);
+                int x_margin = betterRandom.Between(-1, 1);
+                int y_margin = betterRandom.Between(-1, 1);
+                ta_piece.To = new Thickness(
+                    _boss.BossRectangle.Margin.Left + x_margin * 10,
+                    _boss.BossRectangle.Margin.Top + y_margin * 10,
+                    0, 0
+                    );
+                _boss.BossRectangle.BeginAnimation(Rectangle.MarginProperty, ta_piece);
+                await System.Threading.Tasks.Task.Run(() => System.Threading.Thread.Sleep(110));
+            }
+
+            for (int i = (Application.Current.MainWindow as MainWindow).MainCanvas.Children.Count - 1; i >= 0; i--)
+            {
+                if ((Application.Current.MainWindow as MainWindow).MainCanvas.Children[i] is Rectangle
+                    && ((Application.Current.MainWindow as MainWindow).MainCanvas.Children[i] as Rectangle).Name == "Boss")
+                {
+                    (Application.Current.MainWindow as MainWindow).MainCanvas.Children.Remove((Application.Current.MainWindow as MainWindow).MainCanvas.Children[i]);
+                    break;
+                }
+            }
+
+            BetterRandom RandForAnimaObst = new BetterRandom();
+            int count_of_pieces = RandForAnimaObst.Between(30, 40);
+            int count_of_repeat = RandForAnimaObst.Between(5, 10);
+            for (int j = 0; j < count_of_repeat; j++)
+            {
+                for (int i = 0; i < count_of_pieces; i++)
+                {
+                    // piece init
+                    Ellipse piece = new Ellipse();
+                    piece.Fill = RandForAnimaObst.Between(1, 2) == 1 ? Brushes.Red : Brushes.Yellow;
+                    piece.Width = RandForAnimaObst.Between((int)(_boss.bossRectangle.Width * 0.1), (int)(_boss.bossRectangle.Width * 0.4));
+                    piece.Name = "gameover";
+                    piece.Height = RandForAnimaObst.Between((int)(_boss.bossRectangle.Height * 0.1), (int)(_boss.bossRectangle.Height * 0.4));
+
+                    piece.Margin = new Thickness(
+                        _boss.bossRectangle.Margin.Left + _boss.bossRectangle.Width / 2,
+                        _boss.bossRectangle.Margin.Top + _boss.bossRectangle.Height / 2,
+                        0, 0
+                        );
+                    (Application.Current.MainWindow as MainWindow).MainCanvas.Children.Add(piece);
+
+                    // piece animation
+                    DoubleAnimation da_piece = new DoubleAnimation();
+                    da_piece.From = 1; da_piece.To = 0;
+                    da_piece.Duration = TimeSpan.FromSeconds(RandForAnimaObst.Between(2, 4));
+                    da_piece.FillBehavior = FillBehavior.HoldEnd;
+                    da_piece.Completed += (s, _) => AnimationShipDamageCompleted(piece);
+
+                    ThicknessAnimation ta_piece = new ThicknessAnimation();
+                    ta_piece.From = piece.Margin;
+                    ta_piece.Duration = TimeSpan.FromSeconds(RandForAnimaObst.Between(2, 4));
+                    double coord_x = Math.Cos(Math.PI / 180 * (RandForAnimaObst.Between((360 / count_of_pieces) * i, (360 / count_of_pieces) * (i + 1)) + 90));
+                    double coord_y = Math.Cos(Math.PI / 180 * (RandForAnimaObst.Between((360 / count_of_pieces) * i, (360 / count_of_pieces) * (i + 1))));
+                    ta_piece.To = new Thickness(
+                        piece.Margin.Left - (coord_x * RandForAnimaObst.Between(50, 100)),
+                        piece.Margin.Top - (coord_y * RandForAnimaObst.Between(50, 100)),
+                        0, 0
+                        );
+
+                    piece.BeginAnimation(Rectangle.OpacityProperty, da_piece);
+                    piece.BeginAnimation(Rectangle.MarginProperty, ta_piece);
                 }
             }
         }

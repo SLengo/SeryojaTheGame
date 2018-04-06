@@ -155,7 +155,7 @@ namespace Race
                 0, 0);
             _mainWindow.MainCanvas.Children.Add(HatRectangle);
 
-            ShipFireDamage = 5;
+            ShipFireDamage = 2;
 
             ShipHitBox.Width = ShipRectangle.Width * 0.7;
             ShipHitBox.Height = ShipRectangle.Height * 0.7;
