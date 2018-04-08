@@ -6,6 +6,8 @@
     <Application.Resources>
         <local:HpConvetror x:Key="HpConvetror" />
 
+        <BitmapImage x:Key="cat_win" UriSource="images/cat_win.jpg" />
+        
         <Image x:Key="obstmask1" Source="images/obst1.png" />
         <Image x:Key="obstmask2" Source="images/obst2.png" />
         <Image x:Key="obstmask3" Source="images/obst3.png" />
@@ -40,6 +42,7 @@
         <Image x:Key="hat_5" Source="hats/hat_5.png" />
         <Image x:Key="hat_6" Source="hats/hat_6.png" />
         <Image x:Key="hat_7" Source="hats/hat_7.png" />
+        <Image x:Key="hat_8" Source="hats/hat_8.png" />
 
         <!-- bitmaps hats -->
         <BitmapImage x:Key="btm_hat_0" UriSource="hats/none.png" />
@@ -50,12 +53,20 @@
         <BitmapImage x:Key="btm_hat_5" UriSource="hats/hat_5.png" />
         <BitmapImage x:Key="btm_hat_6" UriSource="hats/hat_6.png" />
         <BitmapImage x:Key="btm_hat_7" UriSource="hats/hat_7.png" />
+        <BitmapImage x:Key="btm_hat_8" UriSource="hats/hat_8.png" />
 
         <!-- boss images -->
         <Image x:Key="boss_regular" Source="images/boss_regular.png" />
         <Image x:Key="boss_regular_angry" Source="images/boss_regular_angry.png" />
         <Image x:Key="boss_mouth_open" Source="images/boss_mouth_open.png" />
         <Image x:Key="boss_mouth_open_angry" Source="images/boss_mouth_open_angry.png" />
+
+        <!-- easter eggs -->
+        <BitmapImage x:Key="ee_1" UriSource="easter_eggs/1.png" />
+        <BitmapImage x:Key="ee_2" UriSource="easter_eggs/2.png" />
+        <BitmapImage x:Key="ee_3" UriSource="easter_eggs/3.png" />
+        <BitmapImage x:Key="ee_4" UriSource="easter_eggs/4.png" />
+        <BitmapImage x:Key="ee_5" UriSource="easter_eggs/5.png" />
         
     </Application.Resources>
 </Application>

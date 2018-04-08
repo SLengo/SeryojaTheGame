@@ -18,6 +18,125 @@ namespace Race
 {
     public class AnimationsRace
     {
+        //easter egg animation
+
+        public static async void AnimationMainScreen(StarShip starShip_title, MainWindow mainWindow)
+        {
+            int anim_duration = 500;
+            try
+            {
+                ThicknessAnimation ta_bonus = new ThicknessAnimation(); // up
+                ta_bonus.From = starShip_title.shipRectangle.Margin;
+                ta_bonus.To = new Thickness(starShip_title.shipRectangle.Margin.Left,
+                    starShip_title.shipRectangle.Margin.Top - 20,
+                    0, 0);
+                ta_bonus.Duration = TimeSpan.FromMilliseconds(anim_duration);
+                starShip_title.shipRectangle.BeginAnimation(Ellipse.MarginProperty, ta_bonus);
+                await System.Threading.Tasks.Task.Run(() => System.Threading.Thread.Sleep(anim_duration));
+
+                ta_bonus = new ThicknessAnimation();
+                ta_bonus.From = starShip_title.shipRectangle.Margin;
+                ta_bonus.To = new Thickness(starShip_title.shipRectangle.Margin.Left,
+                    starShip_title.shipRectangle.Margin.Top + 20,
+                    0, 0);
+                ta_bonus.Duration = TimeSpan.FromMilliseconds(anim_duration);
+                starShip_title.shipRectangle.BeginAnimation(Ellipse.MarginProperty, ta_bonus);
+                await System.Threading.Tasks.Task.Run(() => System.Threading.Thread.Sleep(anim_duration * 2));
+
+                // down x3
+                for (int i = 0; i < 3; i++)
+                {
+                    ta_bonus = new ThicknessAnimation();
+                    ta_bonus.From = starShip_title.shipRectangle.Margin;
+                    ta_bonus.To = new Thickness(starShip_title.shipRectangle.Margin.Left,
+                        starShip_title.shipRectangle.Margin.Top + 20,
+                        0, 0);
+                    ta_bonus.Duration = TimeSpan.FromMilliseconds(anim_duration);
+                    starShip_title.shipRectangle.BeginAnimation(Ellipse.MarginProperty, ta_bonus);
+                    await System.Threading.Tasks.Task.Run(() => System.Threading.Thread.Sleep(anim_duration));
+                    ta_bonus = new ThicknessAnimation();
+                    ta_bonus.From = starShip_title.shipRectangle.Margin;
+                    ta_bonus.To = new Thickness(starShip_title.shipRectangle.Margin.Left,
+                        starShip_title.shipRectangle.Margin.Top - 20,
+                        0, 0);
+                    ta_bonus.Duration = TimeSpan.FromMilliseconds(anim_duration);
+                    starShip_title.shipRectangle.BeginAnimation(Ellipse.MarginProperty, ta_bonus);
+                    await System.Threading.Tasks.Task.Run(() => System.Threading.Thread.Sleep(anim_duration));
+                }
+                await System.Threading.Tasks.Task.Run(() => System.Threading.Thread.Sleep(anim_duration));
+
+                //left
+                ta_bonus = new ThicknessAnimation();
+                ta_bonus.From = starShip_title.shipRectangle.Margin;
+                ta_bonus.To = new Thickness(starShip_title.shipRectangle.Margin.Left - 20,
+                    starShip_title.shipRectangle.Margin.Top,
+                    0, 0);
+                ta_bonus.Duration = TimeSpan.FromMilliseconds(anim_duration);
+                starShip_title.shipRectangle.BeginAnimation(Ellipse.MarginProperty, ta_bonus);
+                await System.Threading.Tasks.Task.Run(() => System.Threading.Thread.Sleep(anim_duration));
+
+                ta_bonus = new ThicknessAnimation();
+                ta_bonus.From = starShip_title.shipRectangle.Margin;
+                ta_bonus.To = new Thickness(starShip_title.shipRectangle.Margin.Left + 20,
+                    starShip_title.shipRectangle.Margin.Top,
+                    0, 0);
+                ta_bonus.Duration = TimeSpan.FromMilliseconds(anim_duration);
+                starShip_title.shipRectangle.BeginAnimation(Ellipse.MarginProperty, ta_bonus);
+                await System.Threading.Tasks.Task.Run(() => System.Threading.Thread.Sleep(anim_duration * 2));
+
+                //right
+                ta_bonus = new ThicknessAnimation();
+                ta_bonus.From = starShip_title.shipRectangle.Margin;
+                ta_bonus.To = new Thickness(starShip_title.shipRectangle.Margin.Left + 20,
+                    starShip_title.shipRectangle.Margin.Top,
+                    0, 0);
+                ta_bonus.Duration = TimeSpan.FromMilliseconds(anim_duration);
+                starShip_title.shipRectangle.BeginAnimation(Ellipse.MarginProperty, ta_bonus);
+                await System.Threading.Tasks.Task.Run(() => System.Threading.Thread.Sleep(anim_duration));
+
+                ta_bonus = new ThicknessAnimation();
+                ta_bonus.From = starShip_title.shipRectangle.Margin;
+                ta_bonus.To = new Thickness(starShip_title.shipRectangle.Margin.Left - 20,
+                    starShip_title.shipRectangle.Margin.Top,
+                    0, 0);
+                ta_bonus.Duration = TimeSpan.FromMilliseconds(anim_duration);
+                starShip_title.shipRectangle.BeginAnimation(Ellipse.MarginProperty, ta_bonus);
+                await System.Threading.Tasks.Task.Run(() => System.Threading.Thread.Sleep(anim_duration * 2));
+            }
+            catch { }
+        }
+
+        public static void AnimationEasterEgg(MainWindow mainWindow)
+        {
+            BetterRandom betterRandom = new BetterRandom();
+            DoubleAnimation da_piece = new DoubleAnimation();
+            da_piece.From = 1; da_piece.To = 0;
+            da_piece.Duration = TimeSpan.FromSeconds(1);
+            da_piece.FillBehavior = FillBehavior.HoldEnd;
+            Image image = new Image();
+            image.Source = (BitmapImage)Application.Current.Resources["ee_" + betterRandom.Between(1, 5)];
+            image.Height = mainWindow.MainCanvas.ActualHeight;
+
+            double coef = (image.Source as BitmapImage).Height / image.Height;
+
+            image.Margin = new Thickness(mainWindow.MainCanvas.ActualWidth / 2 - ((image.Source as BitmapImage).Width / coef) / 2,
+                0,
+                0,0);
+            mainWindow.MainCanvas.Children.Add(image);
+            da_piece.Completed += (s, _) => AnimationEasterEggCompleted(image);
+            image.BeginAnimation(Rectangle.OpacityProperty, da_piece);
+        }
+
+        public static void AnimationEasterEggCompleted(UIElement sender)
+        {
+            (Application.Current.MainWindow as MainWindow).MainCanvas.Children.Remove(sender);
+            for (int i = 0; i < (Application.Current.MainWindow as MainWindow).arrow_arr.Length; i++)
+            {
+                (Application.Current.MainWindow as MainWindow).arrow_arr[i] = 0;
+            }
+            (Application.Current.MainWindow as MainWindow).easter_egg_find = false;
+        }
+
         public static void AnimationBonus(Bonus bonus)
         {
             ThicknessAnimation ta_bonus = new ThicknessAnimation();
@@ -499,12 +618,13 @@ namespace Race
             _boss.NowFire = true;
             BetterRandom betterRandom = new BetterRandom();
             int attack_type = betterRandom.Between(1, 2);
+            if (_boss.StopFire) return;
             //int attack_type = 2;
             if (attack_type == 1)
             {
                 for (int i = 0; i < count_of_ammos; i++)
                 {
-                    if (_boss.StopFire) return;
+                    if (_boss == null) return;
                     Ellipse fire = new Ellipse();
                     fire.Width =  _boss.size_of_ammo;
                     fire.Height = _boss.size_of_ammo;
@@ -526,8 +646,12 @@ namespace Race
                         );
                     if (i == count_of_ammos - 1)
                     {
-                        fire.Name = "finish";
-                        (Application.Current.MainWindow as MainWindow).boss.BossSprite.Visual = (Visual)Application.Current.Resources["boss_regular_angry"];
+                        try
+                        {
+                            fire.Name = "finish";
+                            (Application.Current.MainWindow as MainWindow).boss.BossSprite.Visual = (Visual)Application.Current.Resources["boss_regular_angry"];
+                        }
+                        catch { }
                     }
 
                     Ellipse ell = fire;
@@ -538,12 +662,12 @@ namespace Race
             }
             else if (attack_type == 2)
             {
-                if (_boss.StopFire) return;
                 double to_left = 0;
                 int plusOrMinus = 0;
                 double to_top = (Application.Current.MainWindow as MainWindow).ActualHeight;
                 for (int i = 0; i < count_of_ammos; i++)
                 {
+                    if (_boss == null) return;
                     Ellipse fire = new Ellipse();
                     fire.Width = _boss.size_of_ammo;
                     fire.Height = _boss.size_of_ammo;
@@ -564,8 +688,12 @@ namespace Race
                         );
                     if (i == count_of_ammos - 1)
                     {
-                        fire.Name = "finish";
-                        (Application.Current.MainWindow as MainWindow).boss.BossSprite.Visual = (Visual)Application.Current.Resources["boss_regular_angry"];
+                        try
+                        {
+                            fire.Name = "finish";
+                            (Application.Current.MainWindow as MainWindow).boss.BossSprite.Visual = (Visual)Application.Current.Resources["boss_regular_angry"];
+                        }
+                        catch { }
                     }
 
                     Ellipse ell = fire;
@@ -622,8 +750,8 @@ namespace Race
             }
 
             BetterRandom RandForAnimaObst = new BetterRandom();
-            int count_of_pieces = RandForAnimaObst.Between(30, 40);
-            int count_of_repeat = RandForAnimaObst.Between(5, 10);
+            int count_of_pieces = RandForAnimaObst.Between(10, 20);
+            int count_of_repeat = RandForAnimaObst.Between(5, 8);
             for (int j = 0; j < count_of_repeat; j++)
             {
                 for (int i = 0; i < count_of_pieces; i++)
@@ -647,6 +775,8 @@ namespace Race
                     da_piece.From = 1; da_piece.To = 0;
                     da_piece.Duration = TimeSpan.FromSeconds(RandForAnimaObst.Between(2, 4));
                     da_piece.FillBehavior = FillBehavior.HoldEnd;
+                    if(i == count_of_pieces - 1)
+                        piece.Name = "win_a";
                     da_piece.Completed += (s, _) => AnimationShipDamageCompleted(piece);
 
                     ThicknessAnimation ta_piece = new ThicknessAnimation();
@@ -680,10 +810,16 @@ namespace Race
 
         private static void AnimationFireBossCompleted(UIElement element)
         {
-            if ((element as Ellipse).Name == "finish")
+            try
             {
-                (Application.Current.MainWindow as MainWindow).boss.NowFire = false;
-                (Application.Current.MainWindow as MainWindow).boss.CurrentBossAmmos.Clear();
+                if ((element as Ellipse).Name == "finish")
+                {
+                    (Application.Current.MainWindow as MainWindow).boss.NowFire = false;
+                    (Application.Current.MainWindow as MainWindow).boss.CurrentBossAmmos.Clear();
+                }
+            }
+            catch
+            {
             }
         }
 
@@ -702,6 +838,18 @@ namespace Race
 
         private static void AnimationShipDamageCompleted(UIElement element)
         {
+            if((element as Ellipse).Name == "win_a")
+            {
+                Image cat_win = new Image();
+                cat_win.Source = (BitmapImage)Application.Current.Resources["cat_win"];
+                cat_win.Width = (Application.Current.MainWindow as MainWindow).MainCanvas.ActualWidth * 0.8;
+                cat_win.Height = (Application.Current.MainWindow as MainWindow).MainCanvas.ActualWidth * 0.8;
+
+                cat_win.Margin = new Thickness((Application.Current.MainWindow as MainWindow).MainCanvas.ActualWidth / 2 - cat_win.Width / 2,
+                    (Application.Current.MainWindow as MainWindow).MainCanvas.ActualHeight / 2 - cat_win.Height / 2,
+                    0, 0);
+                (Application.Current.MainWindow as MainWindow).MainCanvas.Children.Add(cat_win);
+            }
             (Application.Current.MainWindow as MainWindow).RemoveElementAfterAnimation(element);
         }
 

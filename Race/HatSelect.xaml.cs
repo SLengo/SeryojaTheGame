@@ -36,7 +36,7 @@ namespace Race
         }
 
         int current_hat = 0;
-        int all_hat = 8;
+        int all_hat = 9;
 
         BitmapImage image_hat;
         public BitmapImage ImageHat

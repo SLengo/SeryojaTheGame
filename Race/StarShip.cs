@@ -136,10 +136,12 @@ namespace Race
             ShipRectangle.Name = "Millenniumfalcon";
             ShipRectangle.Width = 50;
             ShipRectangle.Height = 75;
-            ShipRectangle.Margin = new Thickness(_mainWindow.MainCanvas.ActualWidth / 2 - ShipRectangle.Width / 2,
+            if (_mainWindow != null)
+                ShipRectangle.Margin = new Thickness(_mainWindow.MainCanvas.ActualWidth / 2 - ShipRectangle.Width / 2,
                 _mainWindow.MainCanvas.ActualHeight - ShipRectangle.Height - 25,
                 0,0);
-            _mainWindow.MainCanvas.Children.Add(ShipRectangle);
+            if(_mainWindow != null)
+                _mainWindow.MainCanvas.Children.Add(ShipRectangle);
 
             //hat
             HatRectangle = new Rectangle();
@@ -150,10 +152,12 @@ namespace Race
             HatRectangle.Name = "hat";
             HatRectangle.Width = 50;
             HatRectangle.Height = 50;
-            HatRectangle.Margin = new Thickness(_mainWindow.MainCanvas.ActualWidth / 2 - ShipRectangle.Width / 2,
+            if (_mainWindow != null)
+                HatRectangle.Margin = new Thickness(_mainWindow.MainCanvas.ActualWidth / 2 - ShipRectangle.Width / 2,
                 _mainWindow.MainCanvas.ActualHeight - ShipRectangle.Height - 50,
                 0, 0);
-            _mainWindow.MainCanvas.Children.Add(HatRectangle);
+            if (_mainWindow != null)
+                _mainWindow.MainCanvas.Children.Add(HatRectangle);
 
             ShipFireDamage = 2;
 
@@ -174,7 +178,8 @@ namespace Race
                 hb.Width = ShipHitBox.Width;
                 hb.Height = ShipHitBox.Height;
                 hb.Fill = Brushes.LightGreen;
-                _mainWindow.MainCanvas.Children.Add(hb);
+                if (_mainWindow != null)
+                    _mainWindow.MainCanvas.Children.Add(hb);
             }
         }
 

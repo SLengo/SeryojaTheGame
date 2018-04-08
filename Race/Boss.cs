@@ -88,8 +88,8 @@ namespace Race
                 -BossRectangle.Height,
                 0, 0);
 
-            //BossHealthPoint = 25000;
-            BossHealthPoint = 100;
+            BossHealthPoint = 25000;
+            //BossHealthPoint = 100;
 
             BossActionTimer = new DispatcherTimer();
             BossActionTimer.Interval = TimeSpan.FromMilliseconds(1000);

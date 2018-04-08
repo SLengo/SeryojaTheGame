@@ -126,6 +126,7 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="hats\hat_8.png" />
     <Resource Include="images\obst1.png" />
     <Resource Include="images\obst2.png" />
     <Resource Include="images\obst3.png" />
@@ -170,6 +171,12 @@
     <Resource Include="images\boss_mouth_open_angry.png" />
     <Resource Include="images\boss_regular.png" />
     <Resource Include="images\boss_regular_angry.png" />
+    <Resource Include="images\cat_win.jpg" />
+    <Resource Include="easter_eggs\1.png" />
+    <Resource Include="easter_eggs\2.png" />
+    <Resource Include="easter_eggs\3.png" />
+    <Resource Include="easter_eggs\4.png" />
+    <Resource Include="easter_eggs\5.png" />
     <Content Include="sounds\background_music.wav" />
     <Content Include="sounds\emp_laser.wav">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

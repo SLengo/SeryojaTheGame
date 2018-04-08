@@ -23,6 +23,13 @@ namespace Race
     /// </summary>
     public partial class MainWindow : Window
     {
+        DispatcherTimer EasterEggTimer;
+        public int[] arrow_arr = new int[6];
+        int curr_arr_i = 0;
+        int count_of_press = 0;
+        public bool easter_egg_find = false;
+        public bool show_ee_tip = true;
+
         DispatcherTimer ObstsGeneratorTimer;
         DispatcherTimer CollisionTimer;
         DispatcherTimer KeyTrackTimer;
@@ -52,6 +59,7 @@ namespace Race
         bool downpress = false;
         bool spacepress = false;
         bool ser_hurt = false;
+
 
         public int game_time_sec = 0;
 
@@ -90,17 +98,36 @@ namespace Race
             StoryBoardTimer = new DispatcherTimer();
             StoryBoardTimer.Interval = TimeSpan.FromMilliseconds(1000);
             StoryBoardTimer.Tick += new EventHandler(StoryBoardTimerTimerTick);
+
+
+            EasterEggTimer = new DispatcherTimer();
+            EasterEggTimer.Interval = TimeSpan.FromMilliseconds(8);
+            EasterEggTimer.Tick += new EventHandler(EasterEggTimerTimerTick);
         }
 
-        private void Window_Loaded(object sender, RoutedEventArgs e)
+        private async void Window_Loaded(object sender, RoutedEventArgs e)
         {
             ConsoleMethod.WriteToConsole("Game window loaded", Brushes.White);
             Sounds.PlayBackGround();
             clouds = new Clouds(this);
+
+
+            StarShip starShip_title = new StarShip(null);
+            starShip_title.shipRectangle.Margin = new Thickness(MainCanvas.ActualWidth / 2 - starShip_title.shipRectangle.Width / 2,
+                MainCanvas.ActualHeight - 200,
+                0,0);
+            starShip_title.shipRectangle.Name = "ee_tip";
+            MainCanvas.Children.Add(starShip_title.shipRectangle);
+            while (show_ee_tip)
+            {
+                AnimationsRace.AnimationMainScreen(starShip_title, this);
+                await System.Threading.Tasks.Task.Run(() => System.Threading.Thread.Sleep(23 * 500 + 3000));
+            }
         }
 
         private void InitGame()
         {
+            show_ee_tip = false;
             for (int i = MainCanvas.Children.Count - 1; i >= 0; i--)
             {
                 if ((MainCanvas.Children[i] is StackPanel) ||
@@ -108,7 +135,8 @@ namespace Race
                 {
                     MainCanvas.Children.Remove(MainCanvas.Children[i]);
                 }
-                if(MainCanvas.Children[i] is Rectangle && (MainCanvas.Children[i] as Rectangle).Name == "Boss")
+                if(MainCanvas.Children[i] is Rectangle && (MainCanvas.Children[i] as Rectangle).Name == "Boss" ||
+                    (MainCanvas.Children[i] is Rectangle && (MainCanvas.Children[i] as Rectangle).Name == "ee_tip"))
                 {
                     MainCanvas.Children.Remove(MainCanvas.Children[i]);
                 }
@@ -121,7 +149,10 @@ namespace Race
             this.DataContext = null;
             ship = null;
             boss = null;
+            bossfight = false;
             ship = new StarShip(this);
+            game_time_sec = 0;
+            MainCanvas.Children.Remove(progressBarHealthBoss);
             ship.HatSprite.Visual = (Visual)Application.Current.Resources[selected_hat];
             this.DataContext = ship;
             StoryBoardTimer.Start();
@@ -129,6 +160,14 @@ namespace Race
             ObstsGeneratorTimer.Start();
             KeyTrackTimer.Start();
             CollisionTimer.Start();
+
+
+
+            EasterEggTimer.Start();
+            for (int i = 0; i < arrow_arr.Length; i++)
+            {
+                arrow_arr[i] = 0;
+            }
         }
         private void GameOver()
         {
@@ -152,6 +191,11 @@ namespace Race
         }
         private void GameWin()
         {
+            
+
+            Sounds.PlaySoundOnce("win_gto.wav");
+            Sounds.StopBackGround();
+            Sounds.StopBossBackGround();
             BonusGeneratorTimer.Stop();
             ObstsGeneratorTimer.Stop();
             KeyTrackTimer.Stop();
@@ -170,6 +214,54 @@ namespace Race
             AnimationsRace.AnimationBossNoMore(boss);
         }
 
+
+
+        private void ShowEasterEgg()
+        {
+            AnimationsRace.AnimationEasterEgg(this);
+        }
+        private void EasterEggTimerTimerTick(object sender, EventArgs e)
+        {
+            if (easter_egg_find) return;
+            string res = "";
+            foreach (int item in arrow_arr)
+            {
+                res += Convert.ToString(item);
+            }
+            if (res == "122234")
+            {
+                easter_egg_find = true;
+                ShowEasterEgg();
+            }
+        }
+        private void setarrowarr(Key k)
+        {
+            if (curr_arr_i == arrow_arr.Length || k == Key.Up) curr_arr_i = 0;
+            switch (k)
+            {
+                case Key.Up:
+                    {
+                        arrow_arr[curr_arr_i] = 1;
+                        break;
+                    }
+                case Key.Down:
+                    {
+                        arrow_arr[curr_arr_i] = 2;
+                        break;
+                    }
+                case Key.Left:
+                    {
+                        arrow_arr[curr_arr_i] = 3;
+                        break;
+                    }
+                case Key.Right:
+                    {
+                        arrow_arr[curr_arr_i] = 4;
+                        break;
+                    }
+            }
+            curr_arr_i++;
+        }
 
         private void StoryBoardTimerTimerTick(object sender, EventArgs e)
         {
@@ -296,6 +388,7 @@ namespace Race
                             boss.BossHealthPoint -= ship.ShipFireDamage;
                             progressBarHealthBoss.Value = boss.BossHealthPoint;
                             ConsoleMethod.WriteToConsole("Boss hitted!", Brushes.GreenYellow);
+                            continue;
                         }
                         else
                         {
@@ -320,7 +413,7 @@ namespace Race
 
                         if (BossFireHitBox.IntersectsWith(ship.ShipHitBox))
                         {
-                            if (ship.ShipHp >= 0)
+                            if (ship.ShipHp > 0)
                                 ship.ShipHp = ship.ShipHp - boss.BossFireDamage <= 0 ? 0 : ship.ShipHp - boss.BossFireDamage;
                             else
                                 GameOver();
@@ -512,8 +605,7 @@ namespace Race
 
         private void Window_KeyDown(object sender, KeyEventArgs e)
         {
-            
-
+            setarrowarr(e.Key);
             switch (e.Key)
             {
                 case Key.Left:
