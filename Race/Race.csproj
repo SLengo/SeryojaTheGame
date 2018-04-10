@@ -177,6 +177,7 @@
     <Resource Include="easter_eggs\3.png" />
     <Resource Include="easter_eggs\4.png" />
     <Resource Include="easter_eggs\5.png" />
+    <Resource Include="images\icon_refresh.png" />
     <Content Include="sounds\background_music.wav" />
     <Content Include="sounds\emp_laser.wav">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

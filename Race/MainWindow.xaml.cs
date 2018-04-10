@@ -65,7 +65,9 @@ namespace Race
 
         public int game_time_sec = 0;
 
-        public string selected_hat = "hat_0";
+        public string selected_hat_name = "";
+        public Image selected_hat_image;
+        public BitmapImage selected_hat_bitmap_image;
 
         ProgressBar progressBarHealthBoss;
 
@@ -159,7 +161,7 @@ namespace Race
             ship = new StarShip(this);
             game_time_sec = 0;
             MainCanvas.Children.Remove(progressBarHealthBoss);
-            ship.HatSprite.Visual = (Visual)Application.Current.Resources[selected_hat];
+            //ship.HatSprite.Visual = (Visual)Application.Current.Resources[selected_hat_name];
             this.DataContext = ship;
             StoryBoardTimer.Start();
             BonusGeneratorTimer.Start();

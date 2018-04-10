@@ -18,6 +18,10 @@
             <RowDefinition/>
         </Grid.RowDefinitions>
 
+        <TextBlock Grid.Column="1" FontSize="15"
+            TextWrapping="Wrap" TextAlignment="Center" VerticalAlignment="Center"
+            Text="Можешь кинуть свою шляпу в ''hats'' рядом с игрой"/>
+
         <Image Grid.Row="1" Grid.Column="1" Name="HatView" />
         <Image Grid.Row="2" Grid.Column="1" 
                Source="{StaticResource seryoja_mouth_close_bitmap}" />
@@ -26,6 +30,14 @@
             Grid.Row="1" Grid.Column="0" FontSize="25" Content="&lt;" Click="prev_Click" />
         <Button Name="forw" 
             Grid.Row="1" Grid.Column="2" FontSize="25" Content="&gt;" Click="forw_Click" />
-        
+
+        <Button Name="Refresh" Width="40" Height="40"
+            Grid.Row="2" Grid.Column="0" Click="Refresh_Click" >
+            <Image Source="images/icon_refresh.png" />
+            <Button.ToolTip>
+                <ToolTip Content="Обновить если что-то в ''hats'' кинул" />
+            </Button.ToolTip>
+        </Button>
+
     </Grid>
 </Window>

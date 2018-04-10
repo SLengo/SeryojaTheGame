@@ -144,20 +144,28 @@ namespace Race
                 _mainWindow.MainCanvas.Children.Add(ShipRectangle);
 
             //hat
-            HatRectangle = new Rectangle();
-            VisualBrush vb_hat = new VisualBrush();
-            vb_hat.Visual = (Visual)Application.Current.Resources["hat_0"];
-            HatSprite = vb_hat;
-            HatRectangle.Fill = HatSprite;
-            HatRectangle.Name = "hat";
-            HatRectangle.Width = 50;
-            HatRectangle.Height = 50;
-            if (_mainWindow != null)
+            if (mainWindow != null && !String.IsNullOrEmpty(mainWindow.selected_hat_name))
+            {
+                HatRectangle = new Rectangle();
+                VisualBrush vb_hat = new VisualBrush();
+                Image imageHat = new Image();
+                BitmapImage hat = new BitmapImage();
+                hat.BeginInit();
+                hat.UriSource = new Uri(AppDomain.CurrentDomain.BaseDirectory + "hats\\" + mainWindow.selected_hat_name);
+                hat.EndInit();
+                imageHat.Source = hat;
+                vb_hat.Visual = imageHat;
+                HatSprite = vb_hat;
+                HatRectangle.Fill = HatSprite;
+                HatRectangle.Name = "hat";
+                HatRectangle.Width = 50;
+                HatRectangle.Height = 50;
                 HatRectangle.Margin = new Thickness(_mainWindow.MainCanvas.ActualWidth / 2 - ShipRectangle.Width / 2,
                 _mainWindow.MainCanvas.ActualHeight - ShipRectangle.Height - 50,
                 0, 0);
-            if (_mainWindow != null)
+
                 _mainWindow.MainCanvas.Children.Add(HatRectangle);
+            }
 
             ShipFireDamage = 2;
 
@@ -271,9 +279,10 @@ namespace Race
 
         private void StarShipPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            HatRectangle.Margin = new Thickness((sender as StarShip).shipRectangle.Margin.Left,
-                (sender as StarShip).shipRectangle.Margin.Top - 25,
-                0, 0);
+            if(HatRectangle != null)
+                HatRectangle.Margin = new Thickness((sender as StarShip).shipRectangle.Margin.Left,
+                    (sender as StarShip).shipRectangle.Margin.Top - 25,
+                    0, 0);
 
             ShipHitBox.X = (sender as StarShip).shipRectangle.Margin.Left + (((sender as StarShip).shipRectangle.Width - ShipHitBox.Width) / 2);
             ShipHitBox.Y = (sender as StarShip).shipRectangle.Margin.Top + (((sender as StarShip).shipRectangle.Height - ShipHitBox.Height) / 2);
