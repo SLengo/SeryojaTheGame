@@ -7,10 +7,10 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
+using System.Globalization;
+using System.Resources;
 using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
+using System.Collections;
 using System.Runtime.CompilerServices;
 using System.ComponentModel;
 using System.IO;
@@ -35,6 +35,8 @@ namespace Race
             InitializeComponent();
             //ImageHat = new BitmapImage();
             GetHats();
+
+            
         }
         public static string[] GetFiles(string path, string searchPattern, SearchOption searchOption)
         {

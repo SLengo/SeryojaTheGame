@@ -62,6 +62,7 @@
         </Border>
 
         <Canvas Grid.Row="1" Name="MainCanvas" Background="{StaticResource CanvasBrush}" x:FieldModifier="public">
+           
         </Canvas>
         
         <StackPanel Grid.Row="1" Name="Menu" HorizontalAlignment="Center" VerticalAlignment="Center" Orientation="Vertical">

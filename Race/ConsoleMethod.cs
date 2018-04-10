@@ -34,10 +34,15 @@ namespace Race
                 }
             }
         }
-        public static void RunConsoleCommand(string command, string param)
+        public static async void RunConsoleCommand(string command, string param)
         {
             switch (command)
             {
+                case "wingifs":
+                    {
+                        (Application.Current.MainWindow as MainWindow).SetWinImages();
+                        break;
+                    }
                 case "sethp":
                     {
                         if ((Application.Current.MainWindow as MainWindow).ship != null)

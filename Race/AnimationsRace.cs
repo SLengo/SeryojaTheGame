@@ -840,15 +840,7 @@ namespace Race
         {
             if((element as Ellipse).Name == "win_a")
             {
-                Image cat_win = new Image();
-                cat_win.Source = (BitmapImage)Application.Current.Resources["cat_win"];
-                cat_win.Width = (Application.Current.MainWindow as MainWindow).MainCanvas.ActualWidth * 0.8;
-                cat_win.Height = (Application.Current.MainWindow as MainWindow).MainCanvas.ActualWidth * 0.8;
-
-                cat_win.Margin = new Thickness((Application.Current.MainWindow as MainWindow).MainCanvas.ActualWidth / 2 - cat_win.Width / 2,
-                    (Application.Current.MainWindow as MainWindow).MainCanvas.ActualHeight / 2 - cat_win.Height / 2,
-                    0, 0);
-                (Application.Current.MainWindow as MainWindow).MainCanvas.Children.Add(cat_win);
+                (Application.Current.MainWindow as MainWindow).SetWinImages();
             }
             (Application.Current.MainWindow as MainWindow).RemoveElementAfterAnimation(element);
         }
