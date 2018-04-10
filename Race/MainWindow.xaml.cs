@@ -288,8 +288,7 @@ namespace Race
         }
         public async void SetWinImages()
         {
-            
-                List<string> gifs_for_win = new List<string>();
+            List<string> gifs_for_win = new List<string>();
             if (Directory.Exists(AppDomain.CurrentDomain.BaseDirectory + "win_gifs"))
             {
                 string[] hats_files = Directory.GetFiles(AppDomain.CurrentDomain.BaseDirectory + "win_gifs/", "*.gif",
@@ -297,7 +296,7 @@ namespace Race
 
                 for (int i = 0; i < hats_files.Length; i++)
                 {
-                   gifs_for_win.Add(System.IO.Path.GetFileName( hats_files[i] ));
+                    gifs_for_win.Add(System.IO.Path.GetFileName(hats_files[i]));
                 }
             }
 
@@ -312,15 +311,18 @@ namespace Race
                 MainCanvas.Children.Add(img);
                 img.Margin = new Thickness(betterRandom.Between(50, (int)MainCanvas.ActualWidth - (int)img.Width),
                     betterRandom.Between(10, (int)MainCanvas.ActualHeight - 10),
-                    0,0);
+                    0, 0);
                 var image = new BitmapImage();
                 image.BeginInit();
-                image.UriSource = new Uri( AppDomain.CurrentDomain.BaseDirectory + "win_gifs/" + gifs_for_win[i]);
+                image.UriSource = new Uri(AppDomain.CurrentDomain.BaseDirectory + "win_gifs/" + gifs_for_win[i]);
                 image.EndInit();
                 ImageBehavior.SetAnimatedSource(img, image);
                 await Task.Run(() => Thread.Sleep(100));
             }
         }
+        
+
+
 
         private Random rng = new Random();
         public List<T> Shuffle<T>(List<T> list)

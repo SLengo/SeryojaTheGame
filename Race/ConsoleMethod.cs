@@ -34,7 +34,7 @@ namespace Race
                 }
             }
         }
-        public static async void RunConsoleCommand(string command, string param)
+        public static void RunConsoleCommand(string command, string param)
         {
             switch (command)
             {
