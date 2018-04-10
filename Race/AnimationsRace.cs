@@ -750,8 +750,8 @@ namespace Race
             }
 
             BetterRandom RandForAnimaObst = new BetterRandom();
-            int count_of_pieces = RandForAnimaObst.Between(10, 20);
-            int count_of_repeat = RandForAnimaObst.Between(5, 8);
+            int count_of_pieces = RandForAnimaObst.Between(5,5);
+            int count_of_repeat = RandForAnimaObst.Between(3,3);
             for (int j = 0; j < count_of_repeat; j++)
             {
                 for (int i = 0; i < count_of_pieces; i++)
@@ -773,7 +773,7 @@ namespace Race
                     // piece animation
                     DoubleAnimation da_piece = new DoubleAnimation();
                     da_piece.From = 1; da_piece.To = 0;
-                    da_piece.Duration = TimeSpan.FromSeconds(RandForAnimaObst.Between(2, 4));
+                    da_piece.Duration = TimeSpan.FromSeconds(RandForAnimaObst.Between(2, 2));
                     da_piece.FillBehavior = FillBehavior.HoldEnd;
                     if(i == count_of_pieces - 1)
                         piece.Name = "win_a";
@@ -781,7 +781,7 @@ namespace Race
 
                     ThicknessAnimation ta_piece = new ThicknessAnimation();
                     ta_piece.From = piece.Margin;
-                    ta_piece.Duration = TimeSpan.FromSeconds(RandForAnimaObst.Between(2, 4));
+                    ta_piece.Duration = TimeSpan.FromSeconds(RandForAnimaObst.Between(2, 2));
                     double coord_x = Math.Cos(Math.PI / 180 * (RandForAnimaObst.Between((360 / count_of_pieces) * i, (360 / count_of_pieces) * (i + 1)) + 90));
                     double coord_y = Math.Cos(Math.PI / 180 * (RandForAnimaObst.Between((360 / count_of_pieces) * i, (360 / count_of_pieces) * (i + 1))));
                     ta_piece.To = new Thickness(
@@ -838,10 +838,10 @@ namespace Race
 
         private static void AnimationShipDamageCompleted(UIElement element)
         {
-            if((element as Ellipse).Name == "win_a")
-            {
-                (Application.Current.MainWindow as MainWindow).SetWinImages();
-            }
+           // if((element as Ellipse).Name == "win_a")
+           // {
+                //(Application.Current.MainWindow as MainWindow).SetWinImages();
+            //}
             (Application.Current.MainWindow as MainWindow).RemoveElementAfterAnimation(element);
         }
 

@@ -40,7 +40,7 @@ namespace Race
             {
                 case "wingifs":
                     {
-                        (Application.Current.MainWindow as MainWindow).SetWinImages();
+                        (Application.Current.MainWindow as MainWindow).ShowWinGifs();
                         break;
                     }
                 case "sethp":

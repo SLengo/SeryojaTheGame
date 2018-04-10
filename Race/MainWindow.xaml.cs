@@ -80,6 +80,7 @@ namespace Race
         //story board flags
         bool gotospace = false;
         bool bossfight = false;
+        bool game_win = false;
 
         bool pause = false;
         BackgroundWorker _pause;
@@ -264,7 +265,7 @@ namespace Race
             Sounds.GameOverSoundPlay();
             AnimationsRace.AnimationGameOver();
         }
-        private void GameWin()
+        private async void GameWin()
         {
             Sounds.PlaySoundOnce("win_gto.wav");
             Sounds.StopBackGround();
@@ -285,40 +286,95 @@ namespace Race
             CurrentObsts.Clear();
             boss.StopFire = true;
             AnimationsRace.AnimationBossNoMore(boss);
-        }
-        public async void SetWinImages()
-        {
-            List<string> gifs_for_win = new List<string>();
-            if (Directory.Exists(AppDomain.CurrentDomain.BaseDirectory + "win_gifs"))
-            {
-                string[] hats_files = Directory.GetFiles(AppDomain.CurrentDomain.BaseDirectory + "win_gifs/", "*.gif",
-                    SearchOption.TopDirectoryOnly);
+            await Task.Run(() => Thread.Sleep(TimeSpan.FromSeconds(10)));
 
-                for (int i = 0; i < hats_files.Length; i++)
+            ShowWinGifs();
+        }
+        public async void ShowWinGifs()
+        {
+            while (true)
+            {
+                SetWinImages();
+                await Task.Run(() => Thread.Sleep(TimeSpan.FromSeconds(5)));
+                ClearWinImages();
+            }
+        }
+        public void ClearWinImages()
+        {
+            for (int i = MainCanvas.Children.Count - 1; i >= 0; i--)
+            {
+                if (MainCanvas.Children[i] is Image)
                 {
-                    gifs_for_win.Add(System.IO.Path.GetFileName(hats_files[i]));
+                    MainCanvas.Children.Remove(MainCanvas.Children[i]);
                 }
             }
+            GC.Collect();
+            game_win = false;
+        }
 
+
+        List<string> gifs_for_win = null;
+        List<Image> image_gifs_for_win = null;
+        List<BitmapImage> bitmaps_gifs_for_win = null;
+        public async void SetWinImages()
+        {
+            if (game_win) return;
+            game_win = true;
+            DateTime d11 = DateTime.Now;
+            if (gifs_for_win == null)
+            {
+                gifs_for_win = new List<string>();
+                image_gifs_for_win = new List<Image>();
+                bitmaps_gifs_for_win = new List<BitmapImage>();
+                if (Directory.Exists(AppDomain.CurrentDomain.BaseDirectory + "win_gifs"))
+                {
+                    string[] hats_files = Directory.GetFiles(AppDomain.CurrentDomain.BaseDirectory + "win_gifs/", "*.gif",
+                        SearchOption.TopDirectoryOnly);
+
+                    for (int i = 0; i < hats_files.Length; i++)
+                    {
+                        gifs_for_win.Add(System.IO.Path.GetFileName(hats_files[i]));
+                    }
+                }
+            }
+            DateTime d12 = DateTime.Now;
+            TimeSpan d21_d11 = d12 - d11;
             BetterRandom betterRandom = new BetterRandom();
 
             gifs_for_win = Shuffle<string>(gifs_for_win);
 
-            for (int i = 0; i < gifs_for_win.Count; i++)
+            DateTime d21 = DateTime.Now;
+            if (image_gifs_for_win.Count == 0)
             {
-                Image img = new Image();
-                img.Width = betterRandom.Between(100, 200);
-                MainCanvas.Children.Add(img);
-                img.Margin = new Thickness(betterRandom.Between(50, (int)MainCanvas.ActualWidth - (int)img.Width),
+                for (int i = 0; i < gifs_for_win.Count; i++)
+                {
+                    image_gifs_for_win.Add(new Image());
+                    BitmapImage bitmapImage = new BitmapImage();
+                    bitmapImage.BeginInit();
+                    bitmapImage.UriSource = new Uri(AppDomain.CurrentDomain.BaseDirectory + "win_gifs/" + gifs_for_win[i]);
+                    //bitmaps_gifs_for_win[i].DecodePixelWidth = betterRandom.Between(100, 200);
+                    bitmapImage.EndInit();
+
+                    bitmaps_gifs_for_win.Add(bitmapImage);
+                }
+            }
+            DateTime d22 = DateTime.Now;
+            TimeSpan d22_d21 = d22 - d21;
+
+            DateTime d31 = DateTime.Now;
+            for (int i = 0; i < image_gifs_for_win.Count; i++)
+            {
+                image_gifs_for_win[i].Width = betterRandom.Between(100, 200);
+                MainCanvas.Children.Add(image_gifs_for_win[i]);
+                image_gifs_for_win[i].Margin = new Thickness(betterRandom.Between(50, (int)MainCanvas.ActualWidth - (int)bitmaps_gifs_for_win[i].Width),
                     betterRandom.Between(10, (int)MainCanvas.ActualHeight - 10),
                     0, 0);
-                var image = new BitmapImage();
-                image.BeginInit();
-                image.UriSource = new Uri(AppDomain.CurrentDomain.BaseDirectory + "win_gifs/" + gifs_for_win[i]);
-                image.EndInit();
-                ImageBehavior.SetAnimatedSource(img, image);
-                await Task.Run(() => Thread.Sleep(100));
+                
+                ImageBehavior.SetAnimatedSource(image_gifs_for_win[i], bitmaps_gifs_for_win[i]);
+                //await Task.Run(() => Thread.Sleep(100));
             }
+            DateTime d32 = DateTime.Now;
+            TimeSpan d32_d31 = d32 - d31;
         }
         
 
