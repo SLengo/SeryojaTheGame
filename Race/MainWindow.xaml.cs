@@ -14,6 +14,8 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Windows.Media.Animation;
+using System.Threading;
+using System.ComponentModel;
 
 namespace Race
 {
@@ -70,6 +72,10 @@ namespace Race
         //story board flags
         bool gotospace = false;
         bool bossfight = false;
+
+        bool pause = false;
+        BackgroundWorker _pause;
+        Label labelPause;
 
         public MainWindow()
         {
@@ -169,6 +175,67 @@ namespace Race
                 arrow_arr[i] = 0;
             }
         }
+
+        private void Pause()
+        {
+            if (ship == null) return;
+            if (!pause)
+            {
+                pause = true;
+                StoryBoardTimer.Stop();
+                BonusGeneratorTimer.Stop();
+                ObstsGeneratorTimer.Stop();
+                KeyTrackTimer.Stop();
+                CollisionTimer.Stop();
+                clouds.StarTimer.Stop();
+
+                if (bossfight)
+                    boss.BossActionTimer.Stop();
+
+                labelPause = new Label();
+                labelPause.Width = MainCanvas.ActualWidth;
+                labelPause.Height = MainCanvas.ActualHeight;
+                labelPause.VerticalContentAlignment = VerticalAlignment.Center;
+                labelPause.HorizontalContentAlignment = HorizontalAlignment.Center;
+                labelPause.Content = "Pause";
+                labelPause.FontSize = 25;
+                Panel.SetZIndex(labelPause, 99);
+                labelPause.Background = gotospace ? Brushes.Black : Brushes.White;
+                labelPause.Foreground = gotospace ? Brushes.White : Brushes.Black;
+                MainCanvas.Children.Add(labelPause);
+            }
+            else
+            {
+                pause = false;
+                MainCanvas.Children.Remove(labelPause);
+
+                if (bossfight)
+                    boss.BossActionTimer.Start();
+
+                clouds.StarTimer.Start();
+                StoryBoardTimer.Start();
+                BonusGeneratorTimer.Start();
+                ObstsGeneratorTimer.Start();
+                KeyTrackTimer.Start();
+                CollisionTimer.Start();
+            }
+        }
+        //private void DoWork(object sender, System.ComponentModel.DoWorkEventArgs e)
+        //{
+        //    while (pause)
+        //    {
+        //        Thread.Sleep(1000);
+        //        if (_pause.CancellationPending || !pause)
+        //        {
+        //            e.Cancel = true;    
+        //            return;
+        //        }
+        //        Dispatcher.BeginInvoke((Action)(() => {
+        //            Thread.Sleep(1000);
+        //        }));
+        //    }
+        //}
+
         private void GameOver()
         {
             Sounds.StopBackGround();
@@ -659,6 +726,11 @@ namespace Race
                             _console.Owner = this;
                             _console.Show();
                         }
+                        break;
+                    }
+                case Key.Escape:
+                    {
+                        Pause();
                         break;
                     }
             }
