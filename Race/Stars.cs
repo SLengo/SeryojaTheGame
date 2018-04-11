@@ -22,7 +22,7 @@ namespace Race
         BetterRandom RandGenerator;
         MainWindow _mainWindow;
 
-        DispatcherTimer StarTimer;
+        public DispatcherTimer StarTimer;
 
         public Stars(MainWindow mainWindow)
         {

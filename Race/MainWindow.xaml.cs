@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -125,6 +125,10 @@ namespace Race
             ConsoleMethod.WriteToConsole("Game window loaded", Brushes.White);
             Sounds.PlayBackGround();
             clouds = new Clouds(this);
+
+            //Image image = new Image();
+            //AnimationBehavior.SetSourceUri(image, new Uri(@"J:\training\WPF\SeryojaTheGame\SeryojaTheGame\Race\bin\Debug\win_gifs\1.gif"));
+            //MainCanvas.Children.Add(image);
 
 
             StarShip starShip_title = new StarShip(null);
@@ -274,10 +278,8 @@ namespace Race
             ObstsGeneratorTimer.Stop();
             KeyTrackTimer.Stop();
             CollisionTimer.Stop();
-            foreach (Ellipse item in boss.CurrentBossAmmos)
-            {
-                MainCanvas.Children.Remove(item);
-            }
+            stars.StarTimer.Stop();
+
             foreach (Obstacle item in CurrentObsts)
             {
                 item.ObstacleFiredAnimation();
@@ -285,8 +287,16 @@ namespace Race
             }
             CurrentObsts.Clear();
             boss.StopFire = true;
+            boss.CurrentBossAmmos.Clear();
+            stars.AllStars.Clear();
+            ship.CurrentAmmos.Clear();
             AnimationsRace.AnimationBossNoMore(boss);
             await Task.Run(() => Thread.Sleep(TimeSpan.FromSeconds(10)));
+
+            for (int i = MainCanvas.Children.Count - 1; i >= 0; i--)
+            {
+                MainCanvas.Children.Remove(MainCanvas.Children[i]);
+            }
 
             ShowWinGifs();
         }
@@ -303,10 +313,7 @@ namespace Race
         {
             for (int i = MainCanvas.Children.Count - 1; i >= 0; i--)
             {
-                if (MainCanvas.Children[i] is Image)
-                {
-                    MainCanvas.Children.Remove(MainCanvas.Children[i]);
-                }
+                MainCanvas.Children.Remove(MainCanvas.Children[i]);
             }
             GC.Collect();
             game_win = false;
@@ -315,17 +322,27 @@ namespace Race
 
         List<string> gifs_for_win = null;
         List<Image> image_gifs_for_win = null;
-        List<BitmapImage> bitmaps_gifs_for_win = null;
+        List<BitmapImage> BitmapImage_gifs_for_win = null;
+        
         public async void SetWinImages()
         {
             if (game_win) return;
             game_win = true;
             DateTime d11 = DateTime.Now;
+
             if (gifs_for_win == null)
             {
-                gifs_for_win = new List<string>();
                 image_gifs_for_win = new List<Image>();
-                bitmaps_gifs_for_win = new List<BitmapImage>();
+                for (int i = 0; i < 5; i++)
+                {
+                    image_gifs_for_win.Add(new Image());
+                }
+
+                gifs_for_win = new List<string>();
+
+
+                BitmapImage_gifs_for_win = new List<BitmapImage>();
+
                 if (Directory.Exists(AppDomain.CurrentDomain.BaseDirectory + "win_gifs"))
                 {
                     string[] hats_files = Directory.GetFiles(AppDomain.CurrentDomain.BaseDirectory + "win_gifs/", "*.gif",
@@ -333,48 +350,38 @@ namespace Race
 
                     for (int i = 0; i < hats_files.Length; i++)
                     {
-                        gifs_for_win.Add(System.IO.Path.GetFileName(hats_files[i]));
+                        gifs_for_win.Add(System.IO.Path.GetFullPath(hats_files[i]));
+                        
+
+                        BitmapImage bitmapImage = new BitmapImage();
+                        bitmapImage.BeginInit();
+                        bitmapImage.UriSource = new Uri(hats_files[i]);
+                        bitmapImage.EndInit();
+                        BitmapImage_gifs_for_win.Add(bitmapImage);
                     }
                 }
             }
-            DateTime d12 = DateTime.Now;
-            TimeSpan d21_d11 = d12 - d11;
             BetterRandom betterRandom = new BetterRandom();
 
-            gifs_for_win = Shuffle<string>(gifs_for_win);
-
-            DateTime d21 = DateTime.Now;
-            if (image_gifs_for_win.Count == 0)
-            {
-                for (int i = 0; i < gifs_for_win.Count; i++)
-                {
-                    image_gifs_for_win.Add(new Image());
-                    BitmapImage bitmapImage = new BitmapImage();
-                    bitmapImage.BeginInit();
-                    bitmapImage.UriSource = new Uri(AppDomain.CurrentDomain.BaseDirectory + "win_gifs/" + gifs_for_win[i]);
-                    //bitmaps_gifs_for_win[i].DecodePixelWidth = betterRandom.Between(100, 200);
-                    bitmapImage.EndInit();
-
-                    bitmaps_gifs_for_win.Add(bitmapImage);
-                }
-            }
-            DateTime d22 = DateTime.Now;
-            TimeSpan d22_d21 = d22 - d21;
-
-            DateTime d31 = DateTime.Now;
-            for (int i = 0; i < image_gifs_for_win.Count; i++)
+            BitmapImage_gifs_for_win = Shuffle<BitmapImage>(BitmapImage_gifs_for_win);
+            
+            for (int i = 0; i < 5; i++)
             {
                 image_gifs_for_win[i].Width = betterRandom.Between(100, 200);
                 MainCanvas.Children.Add(image_gifs_for_win[i]);
-                image_gifs_for_win[i].Margin = new Thickness(betterRandom.Between(50, (int)MainCanvas.ActualWidth - (int)bitmaps_gifs_for_win[i].Width),
+                
+                //double coef = widths_gifs_for_win[i] / image_gifs_for_win[i].Width;
+                //image_gifs_for_win[i].Height = heights_gifs_for_win[i] / coef;
+
+                image_gifs_for_win[i].Margin = new Thickness(betterRandom.Between(50, (int)MainCanvas.ActualWidth - (int)image_gifs_for_win[i].Width),
                     betterRandom.Between(10, (int)MainCanvas.ActualHeight - 10),
                     0, 0);
+
+                 ImageBehavior.SetAnimatedSource(image_gifs_for_win[i], BitmapImage_gifs_for_win[i]);
+
                 
-                ImageBehavior.SetAnimatedSource(image_gifs_for_win[i], bitmaps_gifs_for_win[i]);
                 //await Task.Run(() => Thread.Sleep(100));
             }
-            DateTime d32 = DateTime.Now;
-            TimeSpan d32_d31 = d32 - d31;
         }
         
 
@@ -559,6 +566,7 @@ namespace Race
                 // bullet on boss
                 if(bossfight)
                 {
+                    if (ship.CurrentAmmos.Count == 0) return;
                     if(boss.GetBossHitBox().IntersectsWith(ship.GetHitBoxFire(ship.CurrentAmmos[i])))
                     {
                         if (boss.BossHealthPoint >= 0)

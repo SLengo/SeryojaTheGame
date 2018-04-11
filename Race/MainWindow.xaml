@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Race"
+        xmlns:gif_1="https://github.com/XamlAnimatedGif/XamlAnimatedGif"
         xmlns:gif="http://wpfanimatedgif.codeplex.com"
         mc:Ignorable="d"
         Title="StarRace" Height="700" Width="600" Loaded="Window_Loaded"
@@ -62,7 +63,7 @@
         </Border>
 
         <Canvas Grid.Row="1" Name="MainCanvas" Background="{StaticResource CanvasBrush}" x:FieldModifier="public">
-           
+            
         </Canvas>
         
         <StackPanel Grid.Row="1" Name="Menu" HorizontalAlignment="Center" VerticalAlignment="Center" Orientation="Vertical">
