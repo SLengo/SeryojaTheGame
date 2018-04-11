@@ -22,7 +22,7 @@ using System.Globalization;
 using System.Resources;
 using System.IO;
 using WpfAnimatedGif;
-
+using XamlAnimatedGif;
 namespace Race
 {
     
@@ -305,7 +305,7 @@ namespace Race
             while (true)
             {
                 SetWinImages();
-                await Task.Run(() => Thread.Sleep(TimeSpan.FromSeconds(5)));
+                await Task.Run(() => Thread.Sleep(TimeSpan.FromSeconds(10)));
                 ClearWinImages();
             }
         }
@@ -333,10 +333,10 @@ namespace Race
             if (gifs_for_win == null)
             {
                 image_gifs_for_win = new List<Image>();
-                for (int i = 0; i < 5; i++)
-                {
-                    image_gifs_for_win.Add(new Image());
-                }
+                //for (int i = 0; i < 10; i++)
+                //{
+                //    image_gifs_for_win.Add(new Image());
+                //}
 
                 gifs_for_win = new List<string>();
 
@@ -351,7 +351,7 @@ namespace Race
                     for (int i = 0; i < hats_files.Length; i++)
                     {
                         gifs_for_win.Add(System.IO.Path.GetFullPath(hats_files[i]));
-                        
+                        image_gifs_for_win.Add(new Image());
 
                         BitmapImage bitmapImage = new BitmapImage();
                         bitmapImage.BeginInit();
@@ -364,8 +364,9 @@ namespace Race
             BetterRandom betterRandom = new BetterRandom();
 
             BitmapImage_gifs_for_win = Shuffle<BitmapImage>(BitmapImage_gifs_for_win);
-            
-            for (int i = 0; i < 5; i++)
+            //gifs_for_win = Shuffle(gifs_for_win);
+
+            for (int i = 0; i < image_gifs_for_win.Count; i++)
             {
                 image_gifs_for_win[i].Width = betterRandom.Between(100, 200);
                 MainCanvas.Children.Add(image_gifs_for_win[i]);
@@ -377,9 +378,9 @@ namespace Race
                     betterRandom.Between(10, (int)MainCanvas.ActualHeight - 10),
                     0, 0);
 
-                 ImageBehavior.SetAnimatedSource(image_gifs_for_win[i], BitmapImage_gifs_for_win[i]);
+                ImageBehavior.SetAnimatedSource(image_gifs_for_win[i], BitmapImage_gifs_for_win[i]);
+                //AnimationBehavior.SetSourceUri(image_gifs_for_win[i], new Uri(gifs_for_win[i]));
 
-                
                 //await Task.Run(() => Thread.Sleep(100));
             }
         }
